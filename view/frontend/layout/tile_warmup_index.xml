@@ -1,0 +1,34 @@
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd" layout="empty">
+    <head>
+        <css src="Magento_Swatches::css/swatches.css"/>
+    </head>
+    <body>
+        <attribute name="class" value="page-products"/>
+        <referenceContainer name="content">
+            <block class="Magento\CatalogSearch\Block\Result" name="search.result" template="result.phtml" cacheable="false">
+                <block class="Magento\CatalogSearch\Block\SearchResult\ListProduct" name="search_result_list" template="product/list.phtml" cacheable="false">
+                    <arguments>
+                        <argument name="positioned" xsi:type="string">positions:list-secondary</argument>
+                    </arguments>
+                    <block class="MageSuite\ProductTileWarmup\Block\Product\ProductList\Toolbar" name="product_list_toolbar" template="Magento_Catalog::product/list/toolbar.phtml" cacheable="false">
+                        <block class="Magento\Theme\Block\Html\Pager" name="product_list_toolbar_pager" cacheable="false"/>
+                    </block>
+                    <action method="setToolbarBlockName">
+                        <argument name="name" xsi:type="string">product_list_toolbar</argument>
+                    </action>
+                    <block class="Magento\Framework\View\Element\RendererList" name="category.product.type.details.renderers" as="details.renderers">
+                        <block class="Magento\Framework\View\Element\Template" as="default"/>
+                    </block>
+                    <block class="Magento\Catalog\Block\Product\ProductList\Item\Container" name="catalogsearch.product.addto" as="addto">
+                        <block class="Magento\Catalog\Block\Product\ProductList\Item\AddTo\Compare"
+                               name="catalogsearch.product.addto.compare" as="compare"
+                               template="Magento_Catalog::product/list/addto/compare.phtml"/>
+                    </block>
+                </block>
+                <action method="setListOrders"/>
+                <action method="setListModes"/>
+                <action method="setListCollection"/>
+            </block>
+        </referenceContainer>
+    </body>
+</page>
