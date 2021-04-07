@@ -4,7 +4,7 @@ namespace MageSuite\ProductTileWarmup\Model;
 
 class GetWarmedUpProductsIds
 {
-    const REDIS_KEY_PREFIX = 'zc:k:ab3_';
+    const REDIS_KEY_PREFIX = 'zc:k:???_';
     const MAX_AMOUNT_OF_KEYS_PER_SCAN = 500;
 
     /**
@@ -31,21 +31,29 @@ class GetWarmedUpProductsIds
         $frontend = $this->cache->getFrontend();
         $backend = $frontend->getBackend();
 
+        if(get_class($backend) == 'Magento\Framework\Cache\Backend\RemoteSynchronizedCache') {
+            $backend = $this->getPrivateProperty($backend, 'remote');
+        }
+
         if(!$this->isRedisCacheBackend($backend)) {
             return [];
         }
 
         /** @var \Credis_Client $redis */
-        $redis = $this->getCredisClient($backend);
+        $redis = $this->getPrivateProperty($backend, '_redis');
 
         $prefix = self::REDIS_KEY_PREFIX . $this->cacheKeyPrefixGenerator->generate().'_';
         $prefixLength = strlen($prefix);
         $pattern = $prefix .'*';
         $ids = [];
-        $iterator = 0;
+        $iterator = null;
 
         do {
             $cacheKeys = $redis->scan($iterator, $pattern, self::MAX_AMOUNT_OF_KEYS_PER_SCAN);
+
+            if($cacheKeys == false) {
+                break;
+            }
 
             $productIds = array_map(function ($key) use($prefixLength) {
                 $key = substr($key, $prefixLength);
@@ -62,14 +70,14 @@ class GetWarmedUpProductsIds
      * To use Redis SCAN command we need Credis_Client configured by Cache backend class
      * That property is protected so we need to hack its retrieval using Reflection API
      */
-    protected function getCredisClient($backend)
+    protected function getPrivateProperty($object, $propertyName)
     {
-        $reflection = new \ReflectionClass($backend);
+        $reflection = new \ReflectionClass($object);
 
-        $property = $reflection->getProperty('_redis');
+        $property = $reflection->getProperty($propertyName);
         $property->setAccessible(true);
 
-        return $property->getValue($backend);
+        return $property->getValue($object);
     }
 
     public function isRedisCacheBackend($backend)
