@@ -1,34 +1,36 @@
 <?php
 namespace MageSuite\ProductTileWarmup\Model\Config\Source;
 
-use MageSuite\ProductTileWarmup\Helper\Configuration;
-
 class CustomerGroup implements \Magento\Framework\Data\OptionSourceInterface
 {
     /**
-     * @var \Magento\Customer\Model\Config\Source\Group
+     * @var \Magento\Customer\Api\GroupManagementInterface
      */
-    protected $customerGroupSource;
+    private $customerGroupManagement;
 
     public function __construct(
-        \Magento\Customer\Model\Config\Source\Group $customerGroupSource
+        \Magento\Customer\Api\GroupManagementInterface $customerGroupManagement
     ) {
-        $this->customerGroupSource = $customerGroupSource;
+        $this->customerGroupManagement = $customerGroupManagement;
     }
 
     /**
      * {@inheritDoc}
+     * @throws null All exceptions are fatal.
      */
     public function toOptionArray(): array
     {
-        return array_merge(
-            [
-                [
-                    'value' => Configuration::CUSTOMER_GROUP_GUEST_ID,
-                    'label' => 'Guest (not signed-in)'
-                ]
-            ],
-            array_slice($this->customerGroupSource->toOptionArray(), 1)
+        return array_map(
+            function (\Magento\Customer\Api\Data\GroupInterface $group): array {
+                return [
+                    'value' => $group->getId(),
+                    'label' => $group->getCode(),
+                ];
+            },
+            array_merge(
+                [$this->customerGroupManagement->getNotLoggedInGroup()],
+                $this->customerGroupManagement->getLoggedInGroups()
+            )
         );
     }
 }

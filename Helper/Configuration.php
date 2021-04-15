@@ -5,6 +5,7 @@ namespace MageSuite\ProductTileWarmup\Helper;
 class Configuration
 {
     const CUSTOMER_GROUP_GUEST_ID         = 0;
+    const ROUTE_TILE_WARMUP               = 'tile/warmup/index';
 
     const CONFIG_PATH_BASE                = 'product_tile_warmup/';
 
@@ -134,6 +135,7 @@ class Configuration
             'intval'
         );
     }
+
     /**
      * @return float
      */

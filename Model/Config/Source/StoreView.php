@@ -4,31 +4,37 @@ namespace MageSuite\ProductTileWarmup\Model\Config\Source;
 class StoreView implements \Magento\Framework\Data\OptionSourceInterface
 {
     /**
-     * @var \Magento\Store\Model\ResourceModel\Store\Collection
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
-    protected $storeCollection;
+    private $storeManager;
 
     public function __construct(
-        \Magento\Store\Model\ResourceModel\Store\Collection $storeCollection
+        \Magento\Store\Model\StoreManagerInterface $storeManager
     ) {
-        $this->storeCollection = $storeCollection;
+        $this->storeManager = $storeManager;
     }
 
     /**
      * {@inheritDoc}
      */
-    public function toOptionArray()
+    public function toOptionArray(): array
     {
-        $options = [];
-        $storesCollection = $this->storeCollection;
+        return array_map(
+            function (\Magento\Store\Api\Data\StoreInterface $store) {
+                $group = $this->storeManager->getGroup($store->getStoreGroupId());
 
-        foreach ($storesCollection as $store) {
-            $options[] = [
-                'label' => $store->getName(),
-                'value' => $store->getStoreId()
-            ];
-        }
-
-        return $options;
+                return [
+                    'label' => sprintf(
+                        '%s / %s (%s)',
+                        $group->getName(),
+                        $store->getName(),
+                        $store->getCode(),
+                    ),
+                    'value' => $store->getId()
+                ];
+            },
+            $this->storeManager->getStores()
+        );
     }
 }
+

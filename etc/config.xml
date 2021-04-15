@@ -4,8 +4,6 @@
         <product_tile_warmup>
             <general>
                 <crawling_enabled>0</crawling_enabled>
-                <customer_groups>0</customer_groups>
-                <store_views>1</store_views>
             </general>
             <crawler>
                 <base_url>http://localhost:80</base_url>
