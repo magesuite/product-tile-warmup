@@ -2,25 +2,31 @@
 
 namespace MageSuite\ProductTileWarmup\Controller\Warmup;
 
-class Index extends \Magento\Framework\App\Action\Action
+class Index implements \Magento\Framework\App\Action\HttpGetActionInterface
 {
+    /**
+     * @var \Magento\Framework\View\Result\PageFactory
+     */
     protected $resultPageFactory;
+
+    /**
+     * @var \Magento\Backend\App\Action\Context
+     */
+    protected $context;
 
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Magento\Framework\View\Result\PageFactory $resultPageFactory
-    )
-    {
-        parent::__construct($context);
-
+    ) {
         $this->context = $context;
         $this->resultPageFactory = $resultPageFactory;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function execute()
     {
-        $page = $this->resultPageFactory->create();
-
-        return $page;
+        return $this->resultPageFactory->create();
     }
 }

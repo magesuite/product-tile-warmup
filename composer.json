@@ -1,15 +1,22 @@
 {
-  "name": "creativestyle/magesuite-product-tile-warmup",
-  "description": "Extension for warming up product tiles",
-  "type": "magento2-module",
-  "homepage": "https://creativestyle.de",
-  "license": "OSL-3.0",
-  "autoload": {
-    "files": [
-      "registration.php"
-    ],
-    "psr-4": {
-      "MageSuite\\ProductTileWarmup\\": ""
+    "name": "creativestyle/magesuite-product-tile-warmup",
+    "description": "Extension for warming up product tiles",
+    "type": "magento2-module",
+    "homepage": "https://creativestyle.de",
+    "license": "OSL-3.0",
+    "require": {
+        "php": ">=7.3",
+        "ext-curl": "*",
+        "psr/log": "~1.0",
+        "guzzlehttp/guzzle": "~6.3",
+        "symfony/stopwatch": "~3.0 | ~4.0"
+    },
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "MageSuite\\ProductTileWarmup\\": ""
+        }
     }
-  }
 }

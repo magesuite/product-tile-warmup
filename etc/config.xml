@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <product_tile_warmup>
+            <general>
+                <crawling_enabled>0</crawling_enabled>
+                <customer_groups>0</customer_groups>
+                <store_views>1</store_views>
+            </general>
+            <crawler>
+                <base_url>http://localhost:80</base_url>
+                <refresh_interval>1</refresh_interval>
+                <concurrency>2</concurrency>
+                <target_ttfb>3</target_ttfb>
+            </crawler>
+        </product_tile_warmup>
+    </default>
+</config>
