@@ -17,7 +17,6 @@
                 <field id="crawling_enabled" translate="label" type="select" sortOrder="10" showInDefault="1">
                     <label>Tile Crawling</label>
                     <comment>Enable or disable the product tile warmer crawling mechanism.</comment>
-
                     <source_model>Magento\Config\Model\Config\Source\Enabledisable</source_model>
                 </field>
                 <field id="customer_groups" translate="label" type="multiselect" sortOrder="20" showInDefault="1">
@@ -28,65 +27,12 @@
                         the tiles will be warmed up while being logged in as each one of them. Enable only the most
                         frequently used customer groups to minimize the performance impact of the crawler.
                     </tooltip>
-
                     <source_model>MageSuite\ProductTileWarmup\Model\Config\Source\CustomerGroup</source_model>
                 </field>
-                <field id="store_views" translate="label" type="multiselect" sortOrder="30" showInDefault="1">
-                    <label>Store Views</label>
-                    <comment>Stores to warm tiles up in.</comment>
-                    <tooltip>Disable low-traffic or unused store views to reduce the load on your infrastructure.</tooltip>
-
+                <field id="disabled_store_views" translate="label" type="multiselect" sortOrder="30" showInDefault="1">
+                    <label>Disabled Store Views</label>
+                    <comment>By default all store views are enabled. Disable only store views that do not display any products.</comment>
                     <source_model>MageSuite\ProductTileWarmup\Model\Config\Source\StoreView</source_model>
-                </field>
-            </group>
-            <group id="crawler" translate="label" type="text" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
-                <label>Advanced Crawler Options</label>
-                <comment>
-                    Advanced technical settings for the HTTP crawler that performs the warmup requests. Most of the time
-                    the defaults will work fine and do not need any adjustment.
-                </comment>
-                <field id="base_url" translate="label" type="text" sortOrder="10" showInDefault="1">
-                    <label>Magento Installation Base URL</label>
-                    <comment>The base URL to use for making the warmup HTTP requests.</comment>
-                    <tooltip>
-                        Since the crawler is warming up only internal Magento cache it can query the local server and
-                        the requests do not need to go through HTTP cache (varnish) or a load-balancer. If adjusting
-                        this value consider using  an internal network address in order to reduce external traffic and
-                        latency. Also note that  an HTTPS is not a requirement as the client will simulate a reverse-proxy
-                        using appropriate header if needed.
-                    </tooltip>
-                </field>
-                <field id="refresh_interval" translate="label" type="text" sortOrder="90" showInDefault="1">
-                    <label>Target Refresh Interval</label>
-                    <comment>The minimum interval between full tile to warmup interations in minutes (from 1 to 1440 [24h]).</comment>
-                    <tooltip>
-                        If the the last warmup interation did not complete the next one will be skipped so the effective
-                        interval will be extended.
-                    </tooltip>
-
-                    <validate>required-entry validate-digits validate-digits-range digits-range-1-1440</validate>
-                </field>
-                <field id="concurrency" translate="label" type="text" sortOrder="100" showInDefault="1">
-                    <label>Target Concurrency</label>
-                    <comment>The number of requests made in parallel as positive integer (from 1 to 30).</comment>
-                    <tooltip>
-                        Note that this is the starting value and crawler may decrease concurrency if it detects that
-                        the server cannot keep up (see TTFB setting).
-                    </tooltip>
-
-                    <validate>required-entry validate-digits validate-digits-range digits-range-1-30</validate>
-                </field>
-                <field id="target_ttfb" translate="label" type="text" sortOrder="110" showInDefault="1">
-                    <label>Target TTFB</label>
-                    <comment>Target maximum response generation time as number of seconds (from 0.1 to 60).</comment>
-                    <tooltip>
-                        The crawler will measure time to first byte for each of the response and adjust the request rate
-                        (bot interval and concurrency)  to keep it below or equal to the configured target in order to
-                        avoid overloading the server. Increase this value if the tile crawling is too aggressive causing
-                        a negative impact on the shop's performance.
-                    </tooltip>
-
-                    <validate>required-entry validate-number validate-number-range number-range-0.1-60.0</validate>
                 </field>
             </group>
         </section>

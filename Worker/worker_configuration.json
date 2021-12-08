@@ -1,0 +1,56 @@
+{
+  "base_path": "/var/www/magento/current/",
+  "stores": [
+    {
+      "store_id": "1",
+      "tile_warmup_url": "https://magesuite.me/de/tile/warmup",
+      "is_logged_in_check_url": "https://magesuite.me/de/customer/section/load",
+      "login_form_url": "https://magesuite.me/de/customer/account/login/",
+      "login_url": "https://magesuite.me/de/customer/account/loginPost/?__mgo_debug_token=swiftlamb78",
+      "customer_groups": [
+
+        {
+          "customer_group_id": 1,
+          "is_guest": false,
+          "credentials": {
+            "login": "krzysztof.kurzydlo+tile@creativestyle.pl",
+            "password": "test123!"
+          }
+        },
+        {
+          "customer_group_id": 0,
+          "is_guest": true,
+          "credentials": {
+            "login": "",
+            "password": ""
+          }
+        }
+      ]
+    },
+    {
+      "store_id": "4",
+      "tile_warmup_url": "https://magesuite.me/en/tile/warmup",
+      "is_logged_in_check_url": "https://magesuite.me/de/customer/section/load",
+      "login_form_url": "https://magesuite.me/de/customer/account/login/",
+      "login_url": "https://magesuite.me/en/customer/account/loginPost/",
+      "customer_groups": [
+        {
+          "customer_group_id": 0,
+          "is_guest": true,
+          "credentials": {
+            "login": "",
+            "password": ""
+          }
+        },
+        {
+          "customer_group_id": 1,
+          "is_guest": false,
+          "credentials": {
+            "login": "krzysztof.kurzydlo+tile@creativestyle.pl",
+            "password": "test123!"
+          }
+        }
+      ]
+    }
+  ]
+}
