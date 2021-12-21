@@ -20,7 +20,7 @@ class WorkerConfigGenerator
     protected $groupManagement;
 
     /**
-     * @var \MageSuite\WarmupCrawler\Service\Credentials\CredentialsProviderLazyCreateDecorator
+     * @var \MageSuite\WarmupCustomerCredentialsGenerator\Service\Credentials\CredentialsProviderLazyCreateDecorator
      */
     protected $credentialsProvider;
 
@@ -28,7 +28,7 @@ class WorkerConfigGenerator
         \MageSuite\ProductTileWarmup\Helper\Configuration $configuration,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Customer\Api\GroupManagementInterface $groupManagement,
-        \MageSuite\WarmupCrawler\Service\Credentials\CredentialsProviderLazyCreateDecorator $credentialsProvider
+        \MageSuite\WarmupCustomerCredentialsGenerator\Service\Credentials\CredentialsProviderLazyCreateDecorator $credentialsProvider
     )
     {
         $this->configuration = $configuration;
