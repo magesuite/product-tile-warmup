@@ -29,17 +29,23 @@ class WorkerConfigGenerator
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Customer\Api\GroupManagementInterface $groupManagement,
         \MageSuite\WarmupCrawler\Service\Credentials\CredentialsProviderLazyCreateDecorator $credentialsProvider
-    ) {
+    )
+    {
         $this->configuration = $configuration;
         $this->storeManager = $storeManager;
         $this->groupManagement = $groupManagement;
         $this->credentialsProvider = $credentialsProvider;
     }
-    public function getConfigContents() {
+
+    public function getConfigContents()
+    {
         $config = ['stores' => []];
 
-        foreach($this->storeManager->getStores() as $store) {
-            if(in_array($store->getId(), $this->configuration->getDisabledStoreViewIds())) {
+        $config['env_file_path'] = BP.'/app/etc/env.php';
+        $config['debug_mode'] = $this->configuration->isDebugModeEnabled();
+
+        foreach ($this->storeManager->getStores() as $store) {
+            if (in_array($store->getId(), $this->configuration->getDisabledStoreViewIds())) {
                 continue;
             }
 
@@ -53,7 +59,11 @@ class WorkerConfigGenerator
     {
         return [
             'store_id' => $store->getId(),
-            'customer_groups' => $this->getCustomerGroups($store)
+            'tile_warmup_url' => $store->getUrl('tile/warmup'),
+            'is_logged_in_check_url' => $store->getUrl('customer/section/load'),
+            'login_form_url' => $store->getUrl('customer/account/login'),
+            'login_url' => $store->getUrl('customer/account/loginpost'),
+            'customer_groups' => $this->getCustomerGroups($store),
         ];
     }
 
@@ -68,14 +78,23 @@ class WorkerConfigGenerator
             $this->groupManagement->getLoggedInGroups()
         );
 
-        foreach($customerGroups as $customerGroup) {
+        foreach ($customerGroups as $customerGroup) {
+            if (!in_array($customerGroup->getId(), $this->configuration->getCustomerGroupIds())) {
+                continue;
+            }
+
             $group = [
                 'customer_group_id' => $customerGroup->getId(),
                 'is_guest' => (bool)($customerGroup->getId() === $notLoggedInGroup->getId()),
             ];
 
-            if(!$group['is_guest']) {
-                $this->credentialsProvider->get($store->getId(), $customerGroup->getId());
+            if (!$group['is_guest']) {
+                $credentials = $this->credentialsProvider->get($store->getId(), $customerGroup->getId());
+
+                $group['credentials'] = [
+                    'login' => $credentials->getUsername(),
+                    'password' => $credentials->getPassword(),
+                ];
             }
 
             $results[] = $group;

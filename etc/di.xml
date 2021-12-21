@@ -7,4 +7,10 @@
             </argument>
         </arguments>
     </type>
+
+    <type name="Magento\Framework\App\Cache">
+        <plugin name="reset_worker_when_product_tag_is_cleaned"
+                type="MageSuite\ProductTileWarmup\Plugin\Framework\App\Cache\ResetWorkerWhenProductTagIsCleaned"
+        />
+    </type>
 </config>

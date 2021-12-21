@@ -2,7 +2,7 @@
 
 namespace MageSuite\ProductTileWarmup\Worker;
 
-class StoreRequestsExecutor
+class ResetException extends \Exception
 {
 
 }
