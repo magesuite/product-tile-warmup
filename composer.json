@@ -5,7 +5,7 @@
     "homepage": "https://creativestyle.de",
     "license": "OSL-3.0",
     "require": {
-        "php": ">=7.3"
+        "creativestyle/magesuite-warmup-customer-credentials-generator": "dev-feature-credentials-generator"
     },
     "autoload": {
         "files": [
