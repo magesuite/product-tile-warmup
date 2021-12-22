@@ -34,7 +34,7 @@ class GetWarmedUpProductsIds
         $frontend = $this->cache->getFrontend();
         $backend = $frontend->getBackend();
 
-        if (get_class($backend) == 'Magento\Framework\Cache\Backend\RemoteSynchronizedCache') {
+        if (get_class($backend) == 'Magento\Framework\Cache\Backend\RemoteSynchronizedCache') { // phpcs:ignore
             $backend = $this->getPrivateProperty($backend, 'remote');
         }
 
@@ -58,7 +58,7 @@ class GetWarmedUpProductsIds
                 break;
             }
 
-            $productIds = array_map(function ($key) use ($prefixLength) {
+            $productIds = array_map(function ($key) use ($prefixLength) { // phpcs:ignore
                 $key = substr($key, $prefixLength);
                 return (int)explode('_', $key)[0];
             }, $cacheKeys);

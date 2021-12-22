@@ -34,7 +34,7 @@ class ResetChecker
             return;
         }
 
-        if($this->isResetTimestampMet()) {
+        if ($this->isResetTimestampMet()) {
             throw new ResetException();
         }
     }
@@ -52,7 +52,7 @@ class ResetChecker
 
         $timestampInDatabase = $statement->fetch();
 
-        if($timestampInDatabase == null) {
+        if ($timestampInDatabase == null) {
             return false;
         }
 

@@ -4,10 +4,7 @@ namespace MageSuite\ProductTileWarmup\Block\System\Form\Field;
 
 class ProcessesConfiguration extends \Magento\Config\Block\System\Config\Form\Field\FieldArray\AbstractFieldArray
 {
-    /**
-     * @var \Magento\Framework\Data\Form\Element\Factory
-     */
-    protected $_elementFactory;
+    const DEFAULT_GROUP_ID = 1;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
@@ -19,17 +16,13 @@ class ProcessesConfiguration extends \Magento\Config\Block\System\Config\Form\Fi
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Framework\Data\Form\Element\Factory $elementFactory
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Framework\Data\Form\Element\Factory $elementFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         array $data = []
-    )
-    {
-        $this->_elementFactory = $elementFactory;
+    ) {
         $this->storeManager = $storeManager;
 
         parent::__construct($context, $data);
@@ -86,13 +79,13 @@ class ProcessesConfiguration extends \Magento\Config\Block\System\Config\Form\Fi
             $result[] = new \Magento\Framework\DataObject([
                 'store_code' => $store->getCode(),
                 'run_in_separate_process_group' => 0,
-                'group_id' => 1,
+                'group_id' => self::DEFAULT_GROUP_ID,
                 '_id' => $store->getId(),
                 'option_extra_attrs' => [],
                 'column_values' => [
                     $store->getId() . '_store_code' => $store->getCode(),
                     $store->getId() . '_run_in_separate_process_group' => 0,
-                    $store->getId() . '_group_id' => 1,
+                    $store->getId() . '_group_id' => self::DEFAULT_GROUP_ID,
                 ]
             ]);
         }
@@ -100,7 +93,7 @@ class ProcessesConfiguration extends \Magento\Config\Block\System\Config\Form\Fi
         return $result;
     }
 
-    function getEnabledColumnRenderer()
+    protected function getEnabledColumnRenderer()
     {
         if (!$this->enabledColumnRenderer) {
             $this->enabledColumnRenderer = $this->getLayout()->createBlock(
@@ -126,7 +119,7 @@ class ProcessesConfiguration extends \Magento\Config\Block\System\Config\Form\Fi
 
     protected function findStoreObjectByStoreId(array $result, int $storeId)
     {
-        foreach($result as $store) {
+        foreach ($result as $store) {
             if ($store->getData('_id') == $storeId) {
                 return $store;
             }
@@ -138,7 +131,7 @@ class ProcessesConfiguration extends \Magento\Config\Block\System\Config\Form\Fi
     protected function modifyDefaultValuesToValuesFromConfiguration($allStores, $configValues)
     {
         foreach ($configValues as $storeId => $storeConfiguration) {
-            if(!($store = $this->findStoreObjectByStoreId($allStores, $storeId))) {
+            if (!($store = $this->findStoreObjectByStoreId($allStores, $storeId))) {
                 continue;
             }
 

@@ -26,8 +26,7 @@ class Configuration
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\Serialize\SerializerInterface $serializer
-    )
-    {
+    ) {
         $this->scopeConfig = $scopeConfig;
         $this->serializer = $serializer;
     }

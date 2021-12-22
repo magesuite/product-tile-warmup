@@ -31,34 +31,52 @@ class CliWorkerInitializer
      */
     protected $moduleDirectory;
 
+    /**
+     * @var \Magento\Framework\Shell
+     */
+    protected $shell;
+
+    /**
+     * @var \Magento\Framework\Serialize\SerializerInterface
+     */
+    protected $serializer;
+
+    /**
+     * @var \Magento\Framework\Filesystem\Driver\File
+     */
+    protected $file;
+
     public function __construct(
         \MageSuite\ProductTileWarmup\Service\Config\WorkerConfigGenerator $workerConfigGenerator,
         \MageSuite\ProductTileWarmup\Helper\Configuration $configuration,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\FlagManager $flagManager,
-        \Magento\Framework\Module\Dir $moduleDirectory
-    )
-    {
+        \Magento\Framework\Module\Dir $moduleDirectory,
+        \Magento\Framework\Shell $shell,
+        \Magento\Framework\Serialize\SerializerInterface $serializer,
+        \Magento\Framework\Filesystem\Driver\File $file
+    ) {
         $this->workerConfigGenerator = $workerConfigGenerator;
         $this->configuration = $configuration;
         $this->storeManager = $storeManager;
         $this->flagManager = $flagManager;
         $this->moduleDirectory = $moduleDirectory;
+        $this->shell = $shell;
+        $this->serializer = $serializer;
+        $this->file = $file;
     }
 
     public function initialize()
     {
         $configDirectory = sprintf('%s/var/tile_warmup', BP);
 
-        if (!file_exists($configDirectory) && !is_dir($configDirectory)) {
-            @mkdir($configDirectory, 0777, true);
-        }
+        $this->file->createDirectory($configDirectory);
 
         $configPath = sprintf('%s/worker_config.json', $configDirectory);
 
-        file_put_contents(
+        $this->file->filePutContents(
             sprintf($configPath, $configDirectory),
-            json_encode($this->workerConfigGenerator->getConfigContents())
+            $this->serializer->serialize($this->workerConfigGenerator->getConfigContents())
         );
 
         $moduleDirectory = $this->moduleDirectory->getDir('MageSuite_ProductTileWarmup');
@@ -78,9 +96,7 @@ class CliWorkerInitializer
             $commandPath .= ' ' . $this->generateStoresArguments($group);
             $commandPath .= ' > /dev/null 2>&1 &';
 
-            echo 'Running ' . $commandPath . PHP_EOL;
-
-            exec($commandPath);
+            $this->shell->execute($commandPath);
         }
     }
 
@@ -105,8 +121,7 @@ class CliWorkerInitializer
 
             $processConfiguration = $processesConfiguration[$storeId];
 
-            if (
-                isset($processConfiguration['run_in_separate_process_group']) &&
+            if (isset($processConfiguration['run_in_separate_process_group']) &&
                 $processConfiguration['run_in_separate_process_group'] == 0
             ) {
                 $groups[self::DEFAULT_GROUP_ID][] = $storeId;
@@ -137,11 +152,10 @@ class CliWorkerInitializer
      */
     public function workerProcessIsRunning(int $groupId): bool
     {
-        exec('ps aux', $processes);
+        $processes = explode(PHP_EOL, $this->shell->execute('ps aux'));
 
         foreach ($processes as $process) {
-            if (
-                strpos($process, 'warmup:worker') !== false &&
+            if (strpos($process, 'warmup:worker') !== false &&
                 strpos($process, 'group_id=' . $groupId) !== false
             ) {
                 return true;

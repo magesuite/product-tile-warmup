@@ -16,11 +16,11 @@ class ResetWorkerWhenProductTagIsCleaned
 
     public function afterClean(\Magento\Framework\App\Cache $subject, $result, $tags = [])
     {
-        if(empty($tags)) {
+        if (empty($tags)) {
             return $result;
         }
 
-        if($this->productTagIsPresent($tags)) {
+        if ($this->productTagIsPresent($tags)) {
             $this->flagManager->saveFlag('reset_warmup_worker', time());
         }
 

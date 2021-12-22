@@ -7,13 +7,15 @@ class DatabaseConnection
     /** @var \PDO */
     protected $connection;
 
-    public function __construct(string $envFilePath) {
-        $config = include $envFilePath;
+    public function __construct(string $envFilePath)
+    {
+        $config = include $envFilePath; // phpcs:ignore
 
         $this->initializeConnection($config['db']['connection']['default']);
     }
 
-    public function getConnection() {
+    public function getConnection()
+    {
         return $this->connection;
     }
 

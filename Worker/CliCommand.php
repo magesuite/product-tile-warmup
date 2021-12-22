@@ -33,8 +33,7 @@ class CliCommand extends \Symfony\Component\Console\Command\Command
     protected function execute(
         \Symfony\Component\Console\Input\InputInterface $input,
         \Symfony\Component\Console\Output\OutputInterface $output
-    ): int
-    {
+    ): int {
         $worker = new Worker($input->getOptions());
         $worker->execute();
     }

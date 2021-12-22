@@ -9,7 +9,8 @@ class GenerateWorkerConfiguration extends \Symfony\Component\Console\Command\Com
      */
     protected $workerConfigGeneratorFacotry;
 
-    public function __construct(\MageSuite\ProductTileWarmup\Service\Config\WorkerConfigGeneratorFactory $workerConfigGeneratorFacotry) {
+    public function __construct(\MageSuite\ProductTileWarmup\Service\Config\WorkerConfigGeneratorFactory $workerConfigGeneratorFacotry)
+    {
         parent::__construct();
 
         $this->workerConfigGeneratorFacotry = $workerConfigGeneratorFacotry;

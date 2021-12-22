@@ -12,12 +12,13 @@ class AccountLogin
     {
         if (!$this->enoughTimePassedFromLastCheck(
             $store['store_id'],
-            $customerGroup['customer_group_id'])
+            $customerGroup['customer_group_id']
+        )
         ) {
             return;
         }
 
-        if($this->isLoggedIn($httpClient, $store, $customerGroup)) {
+        if ($this->isLoggedIn($httpClient, $store, $customerGroup)) {
             return;
         }
 
@@ -31,7 +32,8 @@ class AccountLogin
         return time() >= ($lastCheck + self::DELAY_BETWEEN_LOGIN_CHECKS_IN_MINUTES * 60);
     }
 
-    protected function isLoggedIn($httpClient,  $store, $customerGroup) {
+    protected function isLoggedIn($httpClient, $store, $customerGroup)
+    {
         $storeId = $store['store_id'];
         $customerGroupId = $customerGroup['customer_group_id'];
 
@@ -39,8 +41,7 @@ class AccountLogin
         $isLoggedInResult = (string)$isLoggedInResult->getBody();
         $isLoggedInResult = json_decode($isLoggedInResult, true);
 
-        if (
-            isset($isLoggedInResult['customer']['email']) &&
+        if (isset($isLoggedInResult['customer']['email']) &&
             $isLoggedInResult['customer']['email'] == $customerGroup['credentials']['login']
         ) {
             $this->lastLoginStatusCheck[$storeId][$customerGroupId] = time();
@@ -64,7 +65,8 @@ class AccountLogin
 
         $formKey = $this->getFormKey($html);
 
-        $httpClient->post($store['login_url'],
+        $httpClient->post(
+            $store['login_url'],
             [
                 'form_params' => [
                     'form_key' => $formKey,
@@ -85,7 +87,7 @@ class AccountLogin
     public function getFormKey(string $html): ?string
     {
         $dom = new \DOMDocument();
-        @$dom->loadHTML($html);
+        @$dom->loadHTML($html); // phpcs:ignore
 
         $xpath = new \DOMXpath($dom);
         $elements = $xpath->query("//form[@id='login-form']//input[@name='form_key']");
@@ -97,4 +99,3 @@ class AccountLogin
         return $elements->item(0)->getAttribute('value');
     }
 }
-

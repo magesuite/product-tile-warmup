@@ -6,7 +6,7 @@ class StoreView implements \Magento\Framework\Data\OptionSourceInterface
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
      */
-    private $storeManager;
+    protected $storeManager;
 
     public function __construct(
         \Magento\Store\Model\StoreManagerInterface $storeManager
@@ -28,7 +28,7 @@ class StoreView implements \Magento\Framework\Data\OptionSourceInterface
                         '%s / %s (%s)',
                         $group->getName(),
                         $store->getName(),
-                        $store->getCode(),
+                        $store->getCode()
                     ),
                     'value' => $store->getId()
                 ];
@@ -37,4 +37,3 @@ class StoreView implements \Magento\Framework\Data\OptionSourceInterface
         );
     }
 }
-

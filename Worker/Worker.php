@@ -58,16 +58,7 @@ class Worker
     {
         $this->options = $options;
         $this->workerConfigurationFilePath = $this->options['configuration_file'];
-
-        if ($this->workerConfigurationFilePath === null) {
-            die('Worker configuration file must be passed');
-        }
-
-        if (!file_exists($this->workerConfigurationFilePath)) {
-            die('Worker configuration file does not exist');
-        }
-
-        $this->workerConfiguration = json_decode(file_get_contents($this->workerConfigurationFilePath), true);
+        $this->workerConfiguration = json_decode(file_get_contents($this->workerConfigurationFilePath), true); // phpcs:ignore
         $this->databaseConnection = new DatabaseConnection($this->workerConfiguration['env_file_path']);
         $this->requestDelayStatus = new RequestDelayStatus();
         $this->accountLogin = new AccountLogin();
@@ -84,9 +75,8 @@ class Worker
                 $this->resetChecker->check();
                 $this->warmupStores();
 
-                sleep(1);
-            }
-            catch(ResetException $e) {
+                sleep(1); // phpcs:ignore
+            } catch (ResetException $e) {
                 $this->logger->log('Resetting delays');
 
                 $this->requestDelayStatus->resetAllDelays();

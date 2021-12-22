@@ -6,7 +6,7 @@ class CustomerGroup implements \Magento\Framework\Data\OptionSourceInterface
     /**
      * @var \Magento\Customer\Api\GroupManagementInterface
      */
-    private $customerGroupManagement;
+    protected $customerGroupManagement;
 
     public function __construct(
         \Magento\Customer\Api\GroupManagementInterface $customerGroupManagement

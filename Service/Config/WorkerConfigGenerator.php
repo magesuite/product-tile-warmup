@@ -29,8 +29,7 @@ class WorkerConfigGenerator
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Customer\Api\GroupManagementInterface $groupManagement,
         \MageSuite\WarmupCustomerCredentialsGenerator\Service\Credentials\CredentialsProviderLazyCreateDecorator $credentialsProvider
-    )
-    {
+    ) {
         $this->configuration = $configuration;
         $this->storeManager = $storeManager;
         $this->groupManagement = $groupManagement;

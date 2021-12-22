@@ -42,6 +42,4 @@ class Enabled extends \Magento\Framework\View\Element\Html\Select
             ['label' => 'No', 'value' => '0'],
         ];
     }
-
-
 }
