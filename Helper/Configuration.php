@@ -4,7 +4,6 @@ namespace MageSuite\ProductTileWarmup\Helper;
 
 class Configuration
 {
-    const CUSTOMER_GROUP_GUEST_ID = 0;
     const ROUTE_TILE_WARMUP = 'tile/warmup/index';
 
     const CONFIG_PATH_ENABLED = 'product_tile_warmup/general/crawling_enabled';
@@ -31,25 +30,16 @@ class Configuration
         $this->serializer = $serializer;
     }
 
-    /**
-     * @return bool
-     */
     public function isEnabled(): bool
     {
         return (bool)$this->scopeConfig->getValue(self::CONFIG_PATH_ENABLED);
     }
 
-    /**
-     * @return bool
-     */
     public function isDebugModeEnabled(): bool
     {
         return (bool)$this->scopeConfig->getValue(self::CONFIG_PATH_DEBUG_MODE_ENABLED);
     }
 
-    /**
-     * @return int[]|array
-     */
     public function getDisabledStoreViewIds(): array
     {
         $value = $this->scopeConfig->getValue(self::CONFIG_PATH_DISABLED_STORE_VIEWS);
@@ -61,9 +51,6 @@ class Configuration
         return explode(',', $value);
     }
 
-    /**
-     * @return int[]|array
-     */
     public function getCustomerGroupIds(): array
     {
         $value = $this->scopeConfig->getValue(self::CONFIG_PATH_CUSTOMER_GROUPS);
