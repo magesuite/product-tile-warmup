@@ -33,7 +33,7 @@ class ResetWorkerWhenProductTagIsCleaned
      */
     public function productTagIsPresent($tags): bool
     {
-        if(!is_array($tags)) {
+        if (!is_array($tags)) {
             $tags = [$tags];
         }
 
