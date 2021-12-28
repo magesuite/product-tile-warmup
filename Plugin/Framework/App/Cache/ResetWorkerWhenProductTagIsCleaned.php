@@ -28,11 +28,15 @@ class ResetWorkerWhenProductTagIsCleaned
     }
 
     /**
-     * @param array $tags
+     * @param array|string $tags
      * @return bool
      */
-    public function productTagIsPresent(array $tags): bool
+    public function productTagIsPresent($tags): bool
     {
+        if(!is_array($tags)) {
+            $tags = [$tags];
+        }
+
         foreach ($tags as $tag) {
             if (preg_match('/cat_p_([0-9]*)/si', $tag)) {
                 return true;
