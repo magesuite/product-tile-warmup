@@ -1,6 +1,7 @@
-<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd" layout="empty">
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd" layout="2columns-left">
     <head>
         <css src="Magento_Swatches::css/swatches.css"/>
+        <css src="css/category.css" />
     </head>
     <body>
         <attribute name="class" value="page-products"/>

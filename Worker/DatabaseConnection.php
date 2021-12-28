@@ -1,0 +1,38 @@
+<?php
+
+namespace MageSuite\ProductTileWarmup\Worker;
+
+class DatabaseConnection
+{
+    /** @var \PDO */
+    protected $connection;
+
+    public function __construct(string $envFilePath)
+    {
+        $config = include $envFilePath; // phpcs:ignore
+
+        $this->initializeConnection($config['db']['connection']['default']);
+    }
+
+    public function getConnection()
+    {
+        return $this->connection;
+    }
+
+    /**
+     * @param $config
+     */
+    public function initializeConnection($databaseConfig): void
+    {
+        $host = $databaseConfig['host'];
+        $databaseName = $databaseConfig['dbname'];
+        $username = $databaseConfig['username'];
+        $password = $databaseConfig['password'];
+
+        $this->connection = new \PDO(
+            sprintf('mysql:host=%s;dbname=%s', $host, $databaseName),
+            $username,
+            $password
+        );
+    }
+}

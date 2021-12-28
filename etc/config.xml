@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <product_tile_warmup>
+            <general>
+                <crawling_enabled>1</crawling_enabled>
+                <debug_mode_enabled>0</debug_mode_enabled>
+                <cron_schedule>*/10 * * * *</cron_schedule>
+                <customer_groups>0,1</customer_groups>
+            </general>
+        </product_tile_warmup>
+    </default>
+</config>

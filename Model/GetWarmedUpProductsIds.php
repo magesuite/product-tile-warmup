@@ -20,42 +20,45 @@ class GetWarmedUpProductsIds
     public function __construct(
         \MageSuite\ProductTile\Service\CacheKeyPrefixGenerator $cacheKeyPrefixGenerator,
         \Magento\Framework\App\Cache $cache
-    )
-    {
+    ) {
         $this->cacheKeyPrefixGenerator = $cacheKeyPrefixGenerator;
         $this->cache = $cache;
     }
 
-    public function execute()
+    /**
+     * @return array|int[]
+     * @throws \ReflectionException
+     */
+    public function execute(): array
     {
         $frontend = $this->cache->getFrontend();
         $backend = $frontend->getBackend();
 
-        if(get_class($backend) == 'Magento\Framework\Cache\Backend\RemoteSynchronizedCache') {
+        if (get_class($backend) == 'Magento\Framework\Cache\Backend\RemoteSynchronizedCache') { // phpcs:ignore
             $backend = $this->getPrivateProperty($backend, 'remote');
         }
 
-        if(!$this->isRedisCacheBackend($backend)) {
+        if (!$this->isRedisCacheBackend($backend)) {
             return [];
         }
 
         /** @var \Credis_Client $redis */
         $redis = $this->getPrivateProperty($backend, '_redis');
 
-        $prefix = self::REDIS_KEY_PREFIX . $this->cacheKeyPrefixGenerator->generate().'_';
+        $prefix = self::REDIS_KEY_PREFIX . $this->cacheKeyPrefixGenerator->generate() . '_';
         $prefixLength = strlen($prefix);
-        $pattern = $prefix .'*';
+        $pattern = $prefix . '*';
         $ids = [];
         $iterator = null;
 
         do {
             $cacheKeys = $redis->scan($iterator, $pattern, self::MAX_AMOUNT_OF_KEYS_PER_SCAN);
 
-            if($cacheKeys == false) {
+            if ($cacheKeys == false) {
                 break;
             }
 
-            $productIds = array_map(function ($key) use($prefixLength) {
+            $productIds = array_map(function ($key) use ($prefixLength) { // phpcs:ignore
                 $key = substr($key, $prefixLength);
                 return (int)explode('_', $key)[0];
             }, $cacheKeys);
@@ -69,8 +72,9 @@ class GetWarmedUpProductsIds
     /**
      * To use Redis SCAN command we need Credis_Client configured by Cache backend class
      * That property is protected so we need to hack its retrieval using Reflection API
+     * @throws \ReflectionException
      */
-    protected function getPrivateProperty($object, $propertyName)
+    protected function getPrivateProperty($object, string $propertyName)
     {
         $reflection = new \ReflectionClass($object);
 
@@ -80,7 +84,11 @@ class GetWarmedUpProductsIds
         return $property->getValue($object);
     }
 
-    public function isRedisCacheBackend($backend)
+    /**
+     * @param \Zend_Cache_Backend_Interface $backend
+     * @return bool
+     */
+    public function isRedisCacheBackend(\Zend_Cache_Backend_Interface $backend): bool
     {
         return ($backend instanceof \Cm_Cache_Backend_Redis);
     }

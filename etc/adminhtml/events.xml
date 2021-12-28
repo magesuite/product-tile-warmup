@@ -1,0 +1,8 @@
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+    <event name="adminhtml_cache_flush_all">
+        <observer name="reset_worker_when_cache_is_flushed" instance="MageSuite\ProductTileWarmup\Observer\ResetWorkerWhenCacheIsFlushed" />
+    </event>
+    <event name="adminhtml_cache_flush_system">
+        <observer name="reset_worker_when_cache_is_flushed" instance="MageSuite\ProductTileWarmup\Observer\ResetWorkerWhenCacheIsFlushed" />
+    </event>
+</config>

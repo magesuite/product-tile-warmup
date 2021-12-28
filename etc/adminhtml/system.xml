@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <tab id="magesuite" translate="label" sortOrder="300">
+            <label>MageSuite</label>
+        </tab>
+        <section id="product_tile_warmup" translate="label" type="text" sortOrder="110" showInDefault="1" showInWebsite="1" showInStore="1">
+            <label>Product Tile Warmup</label>
+            <tab>magesuite</tab>
+            <resource>MageSuite_ProductTileWarmup::config_product_tile_warmup</resource>
+            <group id="general" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Basic Tile Warmup Options</label>
+                <comment>
+                    This feature periodically and intelligently crawls special product tile pages in order to pre-generate
+                    the related internal magento caches thus considerably speeding up page load times for the customers.
+                </comment>
+                <field id="crawling_enabled" translate="label" type="select" sortOrder="10" showInDefault="1">
+                    <label>Tile Crawling</label>
+                    <comment>Enable or disable the product tile warmer crawling mechanism.</comment>
+                    <source_model>Magento\Config\Model\Config\Source\Enabledisable</source_model>
+                </field>
+                <field id="debug_mode_enabled" translate="label" type="select" sortOrder="10" showInDefault="1">
+                    <label>Debug mode</label>
+                    <comment>Debug mode will log all actions performed by tile warmup workers into var/log/tile_warmup.log file.</comment>
+                    <source_model>Magento\Config\Model\Config\Source\Enabledisable</source_model>
+                </field>
+                <field id="cron_schedule" translate="label" type="text" sortOrder="10" showInDefault="1">
+                    <label>Cron schedule</label>
+                    <comment>Provide cron schedule in * * * * * format</comment>
+                </field>
+                <field id="customer_groups" translate="label" type="multiselect" sortOrder="20" showInDefault="1">
+                    <label>Customer Groups</label>
+                    <comment>Customers to warm tiles up for.</comment>
+                    <tooltip>
+                        A special customer account will be created in each of these groups (except the guest group) and
+                        the tiles will be warmed up while being logged in as each one of them. Enable only the most
+                        frequently used customer groups to minimize the performance impact of the crawler.
+                    </tooltip>
+                    <source_model>MageSuite\ProductTileWarmup\Model\Config\Source\CustomerGroup</source_model>
+                </field>
+                <field id="disabled_store_views" translate="label" type="multiselect" sortOrder="30" showInDefault="1">
+                    <label>Disabled Store Views</label>
+                    <comment>By default all store views are enabled. Disable only store views that do not display any products.</comment>
+                    <source_model>MageSuite\ProductTileWarmup\Model\Config\Source\StoreView</source_model>
+                </field>
+                <field id="worker_processes_configuration" translate="label" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Workers processes</label>
+                    <frontend_model>MageSuite\ProductTileWarmup\Block\System\Form\Field\ProcessesConfiguration</frontend_model>
+                    <backend_model>Magento\Config\Model\Config\Backend\Serialized\ArraySerialized</backend_model>
+                    <comment>If you want multiple stores to be warmed up in parallel, set them to use separate processes.</comment>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

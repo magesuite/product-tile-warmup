@@ -2,16 +2,20 @@
 
 namespace MageSuite\ProductTileWarmup\Block\Product\ProductList;
 
-class Toolbar  extends \Magento\Catalog\Block\Product\ProductList\Toolbar
+class Toolbar extends \Magento\Catalog\Block\Product\ProductList\Toolbar
 {
     const LIMIT = 100;
 
+    /**
+     * {@inheritDoc}
+     */
     public function setCollection($collection)
     {
         parent::setCollection($collection);
 
         if (!$collection->hasFlag('warmed_tiles_entity_ids_filter_set')) {
             $alreadyWarmedUpIds = $this->getAlreadyWarmedUpProductsIds();
+
             $collection->addFieldToFilter('entity_id', ['nin' => $alreadyWarmedUpIds]);
             $collection->setFlag('warmed_tiles_entity_ids_filter_set', true);
 
@@ -21,11 +25,17 @@ class Toolbar  extends \Magento\Catalog\Block\Product\ProductList\Toolbar
         return $this;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function getLimit()
     {
         return self::LIMIT;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function isExpanded()
     {
         return true;
@@ -34,7 +44,8 @@ class Toolbar  extends \Magento\Catalog\Block\Product\ProductList\Toolbar
     /**
      * ObjectManager is used directly to not override constructor
      */
-    public function getAlreadyWarmedUpProductsIds() {
+    public function getAlreadyWarmedUpProductsIds()
+    {
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
 
         return $objectManager
@@ -46,7 +57,8 @@ class Toolbar  extends \Magento\Catalog\Block\Product\ProductList\Toolbar
      * ObjectManager is used directly to not override constructor
      * @return \Magento\Framework\App\ResponseInterface
      */
-    public function getResponse() {
+    public function getResponse()
+    {
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
 
         return $objectManager
