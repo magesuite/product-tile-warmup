@@ -152,7 +152,7 @@ class CliWorkerInitializer
      */
     public function workerProcessIsRunning(int $groupId): bool
     {
-        $processes = explode(PHP_EOL, $this->shell->execute('ps aux'));
+        $processes = explode(PHP_EOL, $this->shell->execute('ps auxww'));
 
         foreach ($processes as $process) {
             if (strpos($process, 'warmup:worker') !== false &&
