@@ -68,6 +68,10 @@ class CliWorkerInitializer
 
     public function initialize()
     {
+        if (!$this->configuration->isEnabled()) {
+            return;
+        }
+
         $configDirectory = sprintf('%s/var/tile_warmup', BP);
 
         $this->file->createDirectory($configDirectory);
