@@ -56,6 +56,6 @@ class ResetChecker
             return false;
         }
 
-        return $timestampInDatabase > $this->lastResetTimestamp;
+        return (int)$timestampInDatabase['flag_data'] > $this->lastResetTimestamp;
     }
 }

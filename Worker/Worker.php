@@ -59,13 +59,13 @@ class Worker
         $this->options = $options;
         $this->workerConfigurationFilePath = $this->options['configuration_file'];
         $this->workerConfiguration = json_decode(file_get_contents($this->workerConfigurationFilePath), true); // phpcs:ignore
+        $this->logger = new Logger($this->workerConfiguration['debug_mode'] ?? false);
         $this->databaseConnection = new DatabaseConnection($this->workerConfiguration['env_file_path']);
         $this->requestDelayStatus = new RequestDelayStatus();
-        $this->accountLogin = new AccountLogin();
+        $this->httpClientsPool = new HttpClientPool($this->workerConfiguration['auth'] ?? null);
+        $this->accountLogin = new AccountLogin($this->logger);
         $this->resetChecker = new ResetChecker($this->databaseConnection);
-        $this->logger = new Logger($this->workerConfiguration['debug_mode'] ?? false);
         $this->stopwatch = new \Symfony\Component\Stopwatch\Stopwatch();
-        $this->httpClientsPool = new HttpClientPool();
     }
 
     public function execute()
@@ -81,6 +81,8 @@ class Worker
 
                 $this->requestDelayStatus->resetAllDelays();
                 $this->resetChecker->markResetAsDone();
+            } catch (\Exception $e) {
+                $this->logger->log('Exception: '.$e->getMessage());
             }
         }
     }
@@ -126,6 +128,7 @@ class Worker
                         $customerGroup
                     );
                 } catch (\Exception $e) {
+                    $this->logger->log('Exception when trying to log in to account: '.$e->getMessage());
                     continue;
                 }
             }
@@ -155,15 +158,18 @@ class Worker
             $this->stopwatch->start('tile_warmup_request');
 
             try {
-                $options = ['headers' => ['User-Agent' => 'ProductTileWarmup/1.0']];
-
                 $response = $httpClient->request(
                     'HEAD',
-                    $tileWarmupUrl,
-                    $options
+                    $tileWarmupUrl
                 );
             } catch (\Exception $e) {
                 $this->logger->log('Exception: ' . $e->getMessage());
+
+                if ($e->getCode() == 401) {
+                    $this->logger->log('Shop returns unauthorized HTTP code, please configure basic auth');
+                    die; // phpcs:ignore
+                }
+
                 continue;
             }
 
@@ -182,7 +188,7 @@ class Worker
 
                 $this->logger->log(sprintf(
                     'Delaying next warmup to %d seconds',
-                    $this->requestDelayStatus->getDelay($storeId, $customerGroupId),
+                    $this->requestDelayStatus->getDelay($storeId, $customerGroupId)
                 ));
 
                 return;

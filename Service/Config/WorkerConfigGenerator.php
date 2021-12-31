@@ -43,6 +43,13 @@ class WorkerConfigGenerator
         $config['env_file_path'] = BP.'/app/etc/env.php';
         $config['debug_mode'] = $this->configuration->isDebugModeEnabled();
 
+        if ($this->configuration->getBasicAuthUsername() && $this->configuration->getBasicAuthPassword()) {
+            $config['auth'] = [
+                'username' => $this->configuration->getBasicAuthUsername(),
+                'password' => $this->configuration->getBasicAuthPassword(),
+            ];
+        }
+
         foreach ($this->storeManager->getStores() as $store) {
             if (in_array($store->getId(), $this->configuration->getDisabledStoreViewIds())) {
                 continue;
