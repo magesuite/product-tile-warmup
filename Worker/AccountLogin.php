@@ -8,6 +8,17 @@ class AccountLogin
 
     protected $lastLoginStatusCheck = [];
 
+    /**
+     * @var Logger
+     */
+    protected $logger;
+
+    public function __construct(\MageSuite\ProductTileWarmup\Worker\Logger $logger)
+    {
+
+        $this->logger = $logger;
+    }
+
     public function login(\GuzzleHttp\Client $httpClient, $store, $customerGroup)
     {
         if (!$this->enoughTimePassedFromLastCheck(
@@ -37,9 +48,20 @@ class AccountLogin
         $storeId = $store['store_id'];
         $customerGroupId = $customerGroup['customer_group_id'];
 
-        $isLoggedInResult = $httpClient->get($store['is_logged_in_check_url']);
-        $isLoggedInResult = (string)$isLoggedInResult->getBody();
-        $isLoggedInResult = json_decode($isLoggedInResult, true);
+        try {
+            $isLoggedInResult = $httpClient->get($store['is_logged_in_check_url']);
+            $isLoggedInResult = (string)$isLoggedInResult->getBody();
+            $isLoggedInResult = json_decode($isLoggedInResult, true);
+        } catch (\Exception $e) {
+            $this->logger->log('Exception: ' . $e->getMessage());
+
+            if ($e->getCode() == 401) {
+                $this->logger->log('Shop returns unauthorized HTTP code, please configure basic auth');
+                die; // phpcs:ignore
+            }
+
+            return false;
+        }
 
         if (isset($isLoggedInResult['customer']['email']) &&
             $isLoggedInResult['customer']['email'] == $customerGroup['credentials']['login']
@@ -60,25 +82,43 @@ class AccountLogin
      */
     protected function submitLoginForm(\GuzzleHttp\Client $httpClient, $store, $customerGroup): void
     {
-        $loginFormPage = $httpClient->get($store['login_form_url']);
-        $html = (string)$loginFormPage->getBody();
+        try {
+            $loginFormPage = $httpClient->get($store['login_form_url']);
+            $html = (string)$loginFormPage->getBody();
+        } catch (\Exception $e) {
+            $this->logger->log('Exception: ' . $e->getMessage());
+
+            if ($e->getCode() == 401) {
+                $this->logger->log('Shop returns unauthorized HTTP code, please configure basic auth');
+                die; // phpcs:ignore
+            }
+        }
 
         $formKey = $this->getFormKey($html);
 
-        $httpClient->post(
-            $store['login_url'],
-            [
-                'form_params' => [
-                    'form_key' => $formKey,
-                    'login' => [
-                        'username' => $customerGroup['credentials']['login'],
-                        'password' => $customerGroup['credentials']['password']
-                    ],
-                    'send' => '',
-                    'persistent_remember_me' => 'on'
+        try {
+            $httpClient->post(
+                $store['login_url'],
+                [
+                    'form_params' => [
+                        'form_key' => $formKey,
+                        'login' => [
+                            'username' => $customerGroup['credentials']['login'],
+                            'password' => $customerGroup['credentials']['password']
+                        ],
+                        'send' => '',
+                        'persistent_remember_me' => 'on'
+                    ]
                 ]
-            ]
-        );
+            );
+        } catch (\Exception $e) {
+            $this->logger->log('Exception: ' . $e->getMessage());
+
+            if ($e->getCode() == 401) {
+                $this->logger->log('Shop returns unauthorized HTTP code, please configure basic auth');
+                die; // phpcs:ignore
+            }
+        }
     }
 
     /**

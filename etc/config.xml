@@ -8,6 +8,10 @@
                 <cron_schedule>*/10 * * * *</cron_schedule>
                 <customer_groups>0,1</customer_groups>
             </general>
+            <basic_auth>
+                <username></username>
+                <password></password>
+            </basic_auth>
         </product_tile_warmup>
     </default>
 </config>

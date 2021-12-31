@@ -50,6 +50,19 @@
                     <comment>If you want multiple stores to be warmed up in parallel, set them to use separate processes.</comment>
                 </field>
             </group>
+            <group id="basic_auth" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Basic Auth configuration</label>
+                <comment>
+                    If shop frontend is protected by the basic auth, please provide the credentials here.
+                </comment>
+                <field id="username" translate="label" type="text" sortOrder="10" showInDefault="1">
+                    <label>Username</label>
+                </field>
+                <field id="password" translate="label" type="obscure" sortOrder="20" showInDefault="1">
+                    <label>Password</label>
+                    <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                </field>
+            </group>
         </section>
     </system>
 </config>
