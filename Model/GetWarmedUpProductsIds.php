@@ -55,7 +55,7 @@ class GetWarmedUpProductsIds
             $cacheKeys = $redis->scan($iterator, $pattern, self::MAX_AMOUNT_OF_KEYS_PER_SCAN);
 
             if ($cacheKeys == false) {
-                break;
+                continue;
             }
 
             $productIds = array_map(function ($key) use ($prefixLength) { // phpcs:ignore
