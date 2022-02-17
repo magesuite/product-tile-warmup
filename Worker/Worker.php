@@ -54,6 +54,11 @@ class Worker
      */
     protected $httpClientsPool;
 
+    /**
+     * @var LockManager
+     */
+    protected $lockManager;
+
     public function __construct($options)
     {
         $this->options = $options;
@@ -65,6 +70,7 @@ class Worker
         $this->httpClientsPool = new HttpClientPool($this->workerConfiguration['auth'] ?? null);
         $this->accountLogin = new AccountLogin($this->logger);
         $this->resetChecker = new ResetChecker($this->databaseConnection);
+        $this->lockManager = new LockManager($this->databaseConnection);
         $this->stopwatch = new \Symfony\Component\Stopwatch\Stopwatch();
     }
 
@@ -72,6 +78,11 @@ class Worker
     {
         while (true) {
             try {
+                if (!$this->lockManager->canAquireLock($this->options['group_id'])) {
+                    $this->logger->log(sprintf('Another worker is already running for group id %s', $this->options['group_id']));
+                    die; // phpcs:ignore
+                }
+
                 $this->resetChecker->check();
                 $this->warmupStores();
 
