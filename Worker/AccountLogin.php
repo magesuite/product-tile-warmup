@@ -73,44 +73,17 @@ class AccountLogin
         return false;
     }
 
-    /**
-     * @param \GuzzleHttp\Client $httpClient
-     * @param $loginFormUrl
-     * @param $loginUrl
-     * @param $login
-     * @param $password
-     */
     protected function submitLoginForm(\GuzzleHttp\Client $httpClient, $store, $customerGroup): void
     {
         try {
-            $loginFormPage = $httpClient->get($store['login_form_url']);
-            $html = (string)$loginFormPage->getBody();
-        } catch (\Exception $e) {
-            $this->logger->log('Exception: ' . $e->getMessage());
-
-            if ($e->getCode() == 401) {
-                $this->logger->log('Shop returns unauthorized HTTP code, please configure basic auth');
-                die; // phpcs:ignore
-            }
-        }
-
-        $formKey = $this->getFormKey($html);
-
-        try {
-            $httpClient->post(
-                $store['login_url'],
-                [
-                    'form_params' => [
-                        'form_key' => $formKey,
-                        'login' => [
-                            'username' => $customerGroup['credentials']['login'],
-                            'password' => $customerGroup['credentials']['password']
-                        ],
-                        'send' => '',
-                        'persistent_remember_me' => 'on'
-                    ]
+            $postData = [
+                'login' => [
+                    'username' => $customerGroup['credentials']['login'],
+                    'password' => $customerGroup['credentials']['password']
                 ]
-            );
+            ];
+
+            $httpClient->post($store['login_url'], ['form_params' => $postData]);
         } catch (\Exception $e) {
             $this->logger->log('Exception: ' . $e->getMessage());
 
@@ -119,23 +92,5 @@ class AccountLogin
                 die; // phpcs:ignore
             }
         }
-    }
-
-    /**
-     * @param string $html
-     */
-    public function getFormKey(string $html): ?string
-    {
-        $dom = new \DOMDocument();
-        @$dom->loadHTML($html); // phpcs:ignore
-
-        $xpath = new \DOMXpath($dom);
-        $elements = $xpath->query("//form[@id='login-form']//input[@name='form_key']");
-
-        if ($elements->length < 1) {
-            return null;
-        }
-
-        return $elements->item(0)->getAttribute('value');
     }
 }

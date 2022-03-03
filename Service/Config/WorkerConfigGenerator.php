@@ -68,7 +68,7 @@ class WorkerConfigGenerator
             'tile_warmup_url' => $store->getUrl('tile/warmup'),
             'is_logged_in_check_url' => $store->getUrl('customer/section/load'),
             'login_form_url' => $store->getUrl('customer/account/login'),
-            'login_url' => $store->getUrl('customer/account/loginpost'),
+            'login_url' => $store->getUrl('tile/warmup/loginpost'),
             'customer_groups' => $this->getCustomerGroups($store),
         ];
     }

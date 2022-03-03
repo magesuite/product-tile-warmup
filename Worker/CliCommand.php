@@ -28,6 +28,13 @@ class CliCommand extends \Symfony\Component\Console\Command\Command
             \Symfony\Component\Console\Input\InputOption::VALUE_OPTIONAL,
             'Group id'
         );
+
+        $this->addOption(
+            'output_to_console',
+            'oc',
+            \Symfony\Component\Console\Input\InputOption::VALUE_OPTIONAL,
+            'Output logs to console'
+        );
     }
 
     protected function execute(
