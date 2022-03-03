@@ -64,7 +64,10 @@ class Worker
         $this->options = $options;
         $this->workerConfigurationFilePath = $this->options['configuration_file'];
         $this->workerConfiguration = json_decode(file_get_contents($this->workerConfigurationFilePath), true); // phpcs:ignore
-        $this->logger = new Logger($this->workerConfiguration['debug_mode'] ?? false);
+        $this->logger = new Logger(
+            $this->workerConfiguration['debug_mode'] ?? false,
+            $this->options['output_to_console'] ?? false
+        );
         $this->databaseConnection = new DatabaseConnection($this->workerConfiguration['env_file_path']);
         $this->requestDelayStatus = new RequestDelayStatus();
         $this->httpClientsPool = new HttpClientPool($this->workerConfiguration['auth'] ?? null);
