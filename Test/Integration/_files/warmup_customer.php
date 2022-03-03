@@ -28,8 +28,8 @@ $customer->isObjectNew(true);
 $customer->save();
 $customerRegistry->remove($customer->getId());
 
-/** @var CustomerRegistry $customerRegistry */
-$customerRegistry = $objectManager->get(CustomerRegistry::class);
+/** @var \Magento\Customer\Model\CustomerRegistry $customerRegistry */
+$customerRegistry = $objectManager->get(\Magento\Customer\Model\CustomerRegistry::class);
 /** @var Magento\Customer\Model\Customer $customer */
 $customer->setWebsiteId(1)
     ->setId(1)
