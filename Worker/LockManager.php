@@ -4,18 +4,16 @@ namespace MageSuite\ProductTileWarmup\Worker;
 
 class LockManager
 {
-    const LOCK_NAME = 'product_tile_warmup_%s';
+    const LOCK_NAME = '%s_product_tile_warmup_%s';
     const DELAY_BETWEEN_CHECKS_IN_SECONDS = 600;
 
-    /**
-     * @var DatabaseConnection
-     */
-    protected $databaseConnection;
-
+    protected \PDO $databaseConnection;
     protected int $lastCheckTimestamp = 0;
+    protected string $databaseName = '';
 
     public function __construct(DatabaseConnection $databaseConnection)
     {
+        $this->databaseName = $databaseConnection->getDatabaseName();
         $this->databaseConnection = $databaseConnection->getConnection();
     }
 
@@ -28,7 +26,7 @@ class LockManager
             return true;
         }
 
-        $lockName = sprintf(self::LOCK_NAME, $groupId);
+        $lockName = sprintf(self::LOCK_NAME, $this->databaseName, $groupId);
 
         $statement = $this->databaseConnection->prepare("SELECT GET_LOCK('$lockName', 5)");
         $statement->execute();
