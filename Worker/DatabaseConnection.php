@@ -4,8 +4,8 @@ namespace MageSuite\ProductTileWarmup\Worker;
 
 class DatabaseConnection
 {
-    /** @var \PDO */
-    protected $connection;
+    protected \PDO $connection;
+    protected string $databaseName = '';
 
     public function __construct(string $envFilePath)
     {
@@ -14,7 +14,12 @@ class DatabaseConnection
         $this->initializeConnection($config['db']['connection']['default']);
     }
 
-    public function getConnection()
+    public function getDatabaseName(): string
+    {
+        return $this->databaseName;
+    }
+
+    public function getConnection(): \PDO
     {
         return $this->connection;
     }
@@ -25,12 +30,12 @@ class DatabaseConnection
     public function initializeConnection($databaseConfig): void
     {
         $host = $databaseConfig['host'];
-        $databaseName = $databaseConfig['dbname'];
+        $this->databaseName = $databaseConfig['dbname'];
         $username = $databaseConfig['username'];
         $password = $databaseConfig['password'];
 
         $this->connection = new \PDO(
-            sprintf('mysql:host=%s;dbname=%s', $host, $databaseName),
+            sprintf('mysql:host=%s;dbname=%s', $host, $this->getDatabaseName()),
             $username,
             $password
         );
