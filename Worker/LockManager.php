@@ -36,6 +36,6 @@ class LockManager
         $result = $statement->fetchColumn();
 
         $this->lastCheckTimestamp = time();
-        return $result === "1";
+        return (string)$result === "1";
     }
 }
