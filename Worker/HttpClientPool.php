@@ -33,7 +33,7 @@ class HttpClientPool
 
             $defaults = [
                 'headers' => [
-                    'User-Agent' => 'ProductTileWarmup/1.0',
+                    'User-Agent' => 'ProductTileWarmup/1.0'
                 ],
             ];
 

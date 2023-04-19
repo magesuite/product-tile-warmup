@@ -6,45 +6,21 @@ class CliWorkerInitializer
 {
     public const DEFAULT_GROUP_ID = 0;
 
-    /**
-     * @var Config\WorkerConfigGenerator
-     */
-    protected $workerConfigGenerator;
+    protected \MageSuite\ProductTileWarmup\Service\Config\WorkerConfigGenerator $workerConfigGenerator;
 
-    /**
-     * @var \MageSuite\ProductTileWarmup\Helper\Configuration
-     */
-    protected $configuration;
+    protected \MageSuite\ProductTileWarmup\Helper\Configuration $configuration;
 
-    /**
-     * @var \Magento\Store\Model\StoreManagerInterface
-     */
-    protected $storeManager;
+    protected \Magento\Store\Model\StoreManagerInterface $storeManager;
 
-    /**
-     * @var \Magento\Framework\FlagManager
-     */
-    protected $flagManager;
+    protected \Magento\Framework\FlagManager $flagManager;
 
-    /**
-     * @var \Magento\Framework\Module\Dir
-     */
-    protected $moduleDirectory;
+    protected \Magento\Framework\Module\Dir $moduleDirectory;
 
-    /**
-     * @var \Magento\Framework\Shell
-     */
-    protected $shell;
+    protected \Magento\Framework\Shell $shell;
 
-    /**
-     * @var \Magento\Framework\Serialize\SerializerInterface
-     */
-    protected $serializer;
+    protected \Magento\Framework\Serialize\SerializerInterface $serializer;
 
-    /**
-     * @var \Magento\Framework\Filesystem\Driver\File
-     */
-    protected $file;
+    protected \Magento\Framework\Filesystem\Driver\File $file;
 
     public function __construct(
         \MageSuite\ProductTileWarmup\Service\Config\WorkerConfigGenerator $workerConfigGenerator,

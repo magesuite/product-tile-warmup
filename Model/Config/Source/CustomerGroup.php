@@ -1,16 +1,13 @@
 <?php
+
 namespace MageSuite\ProductTileWarmup\Model\Config\Source;
 
 class CustomerGroup implements \Magento\Framework\Data\OptionSourceInterface
 {
-    /**
-     * @var \Magento\Customer\Api\GroupManagementInterface
-     */
-    protected $customerGroupManagement;
+    protected \Magento\Customer\Api\GroupManagementInterface $customerGroupManagement;
 
-    public function __construct(
-        \Magento\Customer\Api\GroupManagementInterface $customerGroupManagement
-    ) {
+    public function __construct(\Magento\Customer\Api\GroupManagementInterface $customerGroupManagement)
+    {
         $this->customerGroupManagement = $customerGroupManagement;
     }
 

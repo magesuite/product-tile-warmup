@@ -6,12 +6,10 @@ class ProcessesConfiguration extends \Magento\Config\Block\System\Config\Form\Fi
 {
     const DEFAULT_GROUP_ID = 1;
 
-    /**
-     * @var \Magento\Store\Model\StoreManagerInterface
-     */
-    protected $storeManager;
+    protected \Magento\Store\Model\StoreManagerInterface $storeManager;
 
     protected $enabledColumnRenderer;
+
     protected $storeCodeColumnRenderer;
 
     /**
@@ -137,12 +135,12 @@ class ProcessesConfiguration extends \Magento\Config\Block\System\Config\Form\Fi
 
             $columnValues = $store->getData('column_values');
 
-            $columnValues[$store->getData('_id').'_run_in_separate_process_group'] = $storeConfiguration['run_in_separate_process_group'];
-            $columnValues[$store->getData('_id').'_group_id'] = $storeConfiguration['group_id'];
+            $columnValues[$store->getData('_id') . '_run_in_separate_process_group'] = $storeConfiguration['run_in_separate_process_group'];
+            $columnValues[$store->getData('_id') . '_group_id'] = $storeConfiguration['group_id'];
 
             $optionExtraAttr = [];
             $optionHash = $this->getEnabledColumnRenderer()->calcOptionHash($storeConfiguration['run_in_separate_process_group']);
-            $optionExtraAttr['option_'. $optionHash] = 'selected="selected"';
+            $optionExtraAttr['option_' . $optionHash] = 'selected="selected"';
 
             $store->setData('column_values', $columnValues);
             $store->setData('option_extra_attrs', $optionExtraAttr);
