@@ -19,16 +19,21 @@
                     <comment>Enable or disable the product tile warmer crawling mechanism.</comment>
                     <source_model>Magento\Config\Model\Config\Source\Enabledisable</source_model>
                 </field>
-                <field id="debug_mode_enabled" translate="label" type="select" sortOrder="10" showInDefault="1">
+                <field id="localhost_mode_enabled" translate="label" type="select" sortOrder="20" showInDefault="1">
+                    <label>Localhost mode</label>
+                    <comment>When it is enabled then requests are send to 127.0.0.1 instead of Base URL.</comment>
+                    <source_model>Magento\Config\Model\Config\Source\Enabledisable</source_model>
+                </field>
+                <field id="debug_mode_enabled" translate="label" type="select" sortOrder="30" showInDefault="1">
                     <label>Debug mode</label>
                     <comment>Debug mode will log all actions performed by tile warmup workers into var/log/tile_warmup.log file.</comment>
                     <source_model>Magento\Config\Model\Config\Source\Enabledisable</source_model>
                 </field>
-                <field id="cron_schedule" translate="label" type="text" sortOrder="10" showInDefault="1">
+                <field id="cron_schedule" translate="label" type="text" sortOrder="40" showInDefault="1">
                     <label>Cron schedule</label>
                     <comment>Provide cron schedule in * * * * * format</comment>
                 </field>
-                <field id="customer_groups" translate="label" type="multiselect" sortOrder="20" showInDefault="1">
+                <field id="customer_groups" translate="label" type="multiselect" sortOrder="50" showInDefault="1">
                     <label>Customer Groups</label>
                     <comment>Customers to warm tiles up for.</comment>
                     <tooltip>
@@ -38,19 +43,19 @@
                     </tooltip>
                     <source_model>MageSuite\ProductTileWarmup\Model\Config\Source\CustomerGroup</source_model>
                 </field>
-                <field id="disabled_store_views" translate="label" type="multiselect" sortOrder="30" showInDefault="1">
+                <field id="disabled_store_views" translate="label" type="multiselect" sortOrder="60" showInDefault="1">
                     <label>Disabled Store Views</label>
                     <comment>By default all store views are enabled. Disable only store views that do not display any products.</comment>
                     <source_model>MageSuite\ProductTileWarmup\Model\Config\Source\StoreView</source_model>
                 </field>
-                <field id="worker_processes_configuration" translate="label" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="worker_processes_configuration" translate="label" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Workers processes</label>
                     <frontend_model>MageSuite\ProductTileWarmup\Block\System\Form\Field\ProcessesConfiguration</frontend_model>
                     <backend_model>Magento\Config\Model\Config\Backend\Serialized\ArraySerialized</backend_model>
                     <comment>If you want multiple stores to be warmed up in parallel, set them to use separate processes.</comment>
                 </field>
             </group>
-            <group id="basic_auth" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+            <group id="basic_auth" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Basic Auth configuration</label>
                 <comment>
                     If shop frontend is protected by the basic auth, please provide the credentials here.
