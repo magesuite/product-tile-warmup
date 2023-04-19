@@ -5,7 +5,7 @@ namespace MageSuite\ProductTileWarmup\Worker;
 class HttpClientPool
 {
     /**
-     * @var null
+     * @var array|null
      */
     protected $auth;
 
@@ -37,17 +37,12 @@ class HttpClientPool
                 ],
             ];
 
-            if (isset($this->auth['username'], $this->auth['password']) &&
-                !empty($this->auth['username']) &&
-                !empty($this->auth['password'])
-            ) {
+            if (isset($this->auth['username'], $this->auth['password']) && !empty($this->auth['username']) && !empty($this->auth['password'])) {
                 $defaults['auth'] = [$this->auth['username'], $this->auth['password']];
             }
 
-            $this->clients[$storeId][$customerGroupId] = new \GuzzleHttp\Client(array_merge([
-                'cookies' => $cookieJar,
-                'timeout' => 60,
-            ], $defaults));
+            $config = array_merge(['cookies' => $cookieJar, 'timeout' => 60], $defaults);
+            $this->clients[$storeId][$customerGroupId] = new \GuzzleHttp\Client($config);
         }
 
         return $this->clients[$storeId][$customerGroupId];
