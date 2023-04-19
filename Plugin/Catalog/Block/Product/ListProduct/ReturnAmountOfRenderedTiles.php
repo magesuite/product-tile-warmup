@@ -8,7 +8,7 @@ class ReturnAmountOfRenderedTiles
 
     protected \Magento\Framework\App\ResponseInterface $response;
 
-    protected   \Magento\Framework\App\RequestInterface $request;
+    protected \Magento\Framework\App\RequestInterface $request;
 
     public function __construct(
         \Magento\Framework\App\ResponseInterface $response,
