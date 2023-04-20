@@ -19,7 +19,7 @@ class HttpClientPool
      */
     protected $clients;
 
-    public function get(int $storeId, int $customerGroupId)
+    public function get(int $storeId, int $customerGroupId, string $host = '')
     {
         if (!isset($this->clients[$storeId][$customerGroupId])) {
             $cookieFile = sprintf(
@@ -34,8 +34,12 @@ class HttpClientPool
             $defaults = [
                 'headers' => [
                     'User-Agent' => 'ProductTileWarmup/1.0'
-                ],
+                ]
             ];
+
+            if ($host) {
+                $defaults['headers']['Host'] = $host;
+            }
 
             if (isset($this->auth['username'], $this->auth['password']) && !empty($this->auth['username']) && !empty($this->auth['password'])) {
                 $defaults['auth'] = [$this->auth['username'], $this->auth['password']];
