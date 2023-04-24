@@ -1,5 +1,5 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:MageSuite_Changelog:etc/changelog.xsd">
-    <module id="MageSuite_CheckoutNewsletterSubscription" name="MageSuite_CheckoutNewsletterSubscription">
+    <module id="MageSuite_ProductTileWarmup" name="MageSuite_ProductTileWarmup">
         <changelog>
             <tag version="1.0.0" date="2021-04-07">
                 <entry>
