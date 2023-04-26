@@ -101,10 +101,10 @@ class WorkerConfigGenerator
     protected function getBaseUrl(\Magento\Store\Api\Data\StoreInterface $store): ?string
     {
         if ($this->configuration->isLocalhostModeEnabled()) {
-            return null;
+            return $store->getBaseUrl();
         }
 
-        return $store->getBaseUrl();
+        return null;
     }
 
     protected function getUrl(string $path, \Magento\Store\Api\Data\StoreInterface $store): string
