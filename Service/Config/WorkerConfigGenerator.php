@@ -111,10 +111,6 @@ class WorkerConfigGenerator
 
     protected function getUrl(string $path, \Magento\Store\Api\Data\StoreInterface $store): string
     {
-        if ($this->configuration->isLocalhostModeEnabled()) {
-            return sprintf('http://127.0.0.1:80/%s', $path);
-        }
-
         return $store->getUrl($path);
     }
 }
