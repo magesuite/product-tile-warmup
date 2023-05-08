@@ -126,7 +126,7 @@ class Worker
     protected function warmupCustomerGroups($store): void
     {
         $storeId = $store['store_id'];
-        $host = $store['base_url'] ?? '';
+        $host = $store['host'] ?? '';
 
         foreach ($store['customer_groups'] as $customerGroup) {
             $customerGroupId = $customerGroup['customer_group_id'];
@@ -165,7 +165,7 @@ class Worker
     protected function warmTiles($store, $customerGroupId): void
     {
         $storeId = $store['store_id'];
-        $host = $store['base_url'] ?? '';
+        $host = $store['host'] ?? '';
         $httpClient = $this->httpClientsPool->get($storeId, $customerGroupId, $host);
 
         while (true) {

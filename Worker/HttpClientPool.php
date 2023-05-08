@@ -39,6 +39,8 @@ class HttpClientPool
 
             if ($host) {
                 $defaults['headers']['Host'] = $host;
+                $defaults['headers']['X-Forwarded-Proto'] = 'https';
+                $defaults['curl'][CURLOPT_RESOLVE] = [sprintf('%s:80:127.0.0.1', $host)];
             }
 
             if (isset($this->auth['username'], $this->auth['password']) && !empty($this->auth['username']) && !empty($this->auth['password'])) {

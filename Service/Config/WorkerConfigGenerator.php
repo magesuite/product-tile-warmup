@@ -52,7 +52,7 @@ class WorkerConfigGenerator
     protected function getStoreData(\Magento\Store\Api\Data\StoreInterface $store)
     {
         return [
-            'base_url' => $this->getBaseUrl($store),
+            'host' => $this->getHost($store),
             'store_id' => $store->getId(),
             'tile_warmup_url' => $this->getUrl('tile/warmup', $store),
             'is_logged_in_check_url' => $this->getUrl('customer/section/load', $store),
@@ -98,13 +98,15 @@ class WorkerConfigGenerator
         return $results;
     }
 
-    protected function getBaseUrl(\Magento\Store\Api\Data\StoreInterface $store): ?string
+    protected function getHost(\Magento\Store\Api\Data\StoreInterface $store): ?string
     {
-        if ($this->configuration->isLocalhostModeEnabled()) {
-            return $store->getBaseUrl();
+        if (!$this->configuration->isLocalhostModeEnabled()) {
+            return null;
         }
 
-        return null;
+        $urlParts = parse_url($store->getBaseUrl());
+
+        return $urlParts['host'] ?? null;
     }
 
     protected function getUrl(string $path, \Magento\Store\Api\Data\StoreInterface $store): string
