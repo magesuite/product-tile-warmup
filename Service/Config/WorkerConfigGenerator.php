@@ -104,7 +104,7 @@ class WorkerConfigGenerator
             return null;
         }
 
-        $urlParts = parse_url($store->getBaseUrl());
+        $urlParts = parse_url($store->getBaseUrl()); //phpcs:ignore
 
         return $urlParts['host'] ?? null;
     }
