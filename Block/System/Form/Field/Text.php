@@ -9,6 +9,7 @@ class Text extends \Magento\Framework\View\Element\AbstractBlock
         if (!$this->_beforeToHtml()) {
             return '';
         }
+
         return '<%- store_code %>';
     }
 }

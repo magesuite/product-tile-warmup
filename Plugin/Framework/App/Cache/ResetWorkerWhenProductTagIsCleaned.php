@@ -4,10 +4,7 @@ namespace MageSuite\ProductTileWarmup\Plugin\Framework\App\Cache;
 
 class ResetWorkerWhenProductTagIsCleaned
 {
-    /**
-     * @var \Magento\Framework\FlagManager
-     */
-    protected $flagManager;
+    protected \Magento\Framework\FlagManager $flagManager;
 
     public function __construct(\Magento\Framework\FlagManager $flagManager)
     {

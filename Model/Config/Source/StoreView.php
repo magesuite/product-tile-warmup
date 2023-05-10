@@ -1,16 +1,13 @@
 <?php
+
 namespace MageSuite\ProductTileWarmup\Model\Config\Source;
 
 class StoreView implements \Magento\Framework\Data\OptionSourceInterface
 {
-    /**
-     * @var \Magento\Store\Model\StoreManagerInterface
-     */
-    protected $storeManager;
+    protected \Magento\Store\Model\StoreManagerInterface $storeManager;
 
-    public function __construct(
-        \Magento\Store\Model\StoreManagerInterface $storeManager
-    ) {
+    public function __construct(\Magento\Store\Model\StoreManagerInterface $storeManager)
+    {
         $this->storeManager = $storeManager;
     }
 

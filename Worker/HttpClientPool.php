@@ -5,7 +5,7 @@ namespace MageSuite\ProductTileWarmup\Worker;
 class HttpClientPool
 {
     /**
-     * @var null
+     * @var array|null
      */
     protected $auth;
 
@@ -19,7 +19,7 @@ class HttpClientPool
      */
     protected $clients;
 
-    public function get(int $storeId, int $customerGroupId)
+    public function get(int $storeId, int $customerGroupId, string $host = '')
     {
         if (!isset($this->clients[$storeId][$customerGroupId])) {
             $cookieFile = sprintf(
@@ -33,21 +33,22 @@ class HttpClientPool
 
             $defaults = [
                 'headers' => [
-                    'User-Agent' => 'ProductTileWarmup/1.0',
-                ],
+                    'User-Agent' => 'ProductTileWarmup/1.0'
+                ]
             ];
 
-            if (isset($this->auth['username'], $this->auth['password']) &&
-                !empty($this->auth['username']) &&
-                !empty($this->auth['password'])
-            ) {
+            if ($host) {
+                $defaults['headers']['Host'] = $host;
+                $defaults['headers']['X-Forwarded-Proto'] = 'https';
+                $defaults['curl'][CURLOPT_RESOLVE] = [sprintf('%s:80:127.0.0.1', $host)];
+            }
+
+            if (isset($this->auth['username'], $this->auth['password']) && !empty($this->auth['username']) && !empty($this->auth['password'])) {
                 $defaults['auth'] = [$this->auth['username'], $this->auth['password']];
             }
 
-            $this->clients[$storeId][$customerGroupId] = new \GuzzleHttp\Client(array_merge([
-                'cookies' => $cookieJar,
-                'timeout' => 60,
-            ], $defaults));
+            $config = array_merge(['cookies' => $cookieJar, 'timeout' => 60], $defaults);
+            $this->clients[$storeId][$customerGroupId] = new \GuzzleHttp\Client($config);
         }
 
         return $this->clients[$storeId][$customerGroupId];

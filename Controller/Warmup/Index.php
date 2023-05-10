@@ -4,15 +4,9 @@ namespace MageSuite\ProductTileWarmup\Controller\Warmup;
 
 class Index implements \Magento\Framework\App\Action\HttpGetActionInterface
 {
-    /**
-     * @var \Magento\Framework\View\Result\PageFactory
-     */
-    protected $resultPageFactory;
+    protected ?\Magento\Framework\View\Result\PageFactory $resultPageFactory;
 
-    /**
-     * @var \Magento\Backend\App\Action\Context
-     */
-    protected $context;
+    protected ?\Magento\Backend\App\Action\Context $context;
 
     public function __construct(
         \Magento\Backend\App\Action\Context $context,

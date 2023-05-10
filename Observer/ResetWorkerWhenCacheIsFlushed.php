@@ -4,10 +4,7 @@ namespace MageSuite\ProductTileWarmup\Observer;
 
 class ResetWorkerWhenCacheIsFlushed implements \Magento\Framework\Event\ObserverInterface
 {
-    /**
-     * @var \Magento\Framework\FlagManager
-     */
-    protected $flagManager;
+    protected \Magento\Framework\FlagManager $flagManager;
 
     public function __construct(\Magento\Framework\FlagManager $flagManager)
     {

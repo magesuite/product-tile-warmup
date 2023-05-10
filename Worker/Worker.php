@@ -96,7 +96,9 @@ class Worker
                 $this->requestDelayStatus->resetAllDelays();
                 $this->resetChecker->markResetAsDone();
             } catch (\Exception $e) {
-                $this->logger->log('Exception: '.$e->getMessage());
+                $this->logger->log('Exception: ' . $e->getMessage());
+
+                sleep(2); // phpcs:ignore
             }
         }
     }
@@ -124,6 +126,7 @@ class Worker
     protected function warmupCustomerGroups($store): void
     {
         $storeId = $store['store_id'];
+        $host = $store['host'] ?? '';
 
         foreach ($store['customer_groups'] as $customerGroup) {
             $customerGroupId = $customerGroup['customer_group_id'];
@@ -132,7 +135,7 @@ class Worker
                 continue;
             }
 
-            $httpClient = $this->httpClientsPool->get($storeId, $customerGroupId);
+            $httpClient = $this->httpClientsPool->get($storeId, $customerGroupId, $host);
 
             if ($customerGroup['is_guest'] === false) {
                 try {
@@ -142,7 +145,10 @@ class Worker
                         $customerGroup
                     );
                 } catch (\Exception $e) {
-                    $this->logger->log('Exception when trying to log in to account: '.$e->getMessage());
+                    $this->logger->log('Exception when trying to log in to account: ' . $e->getMessage());
+
+                    sleep(2); // phpcs:ignore
+
                     continue;
                 }
             }
@@ -159,7 +165,8 @@ class Worker
     protected function warmTiles($store, $customerGroupId): void
     {
         $storeId = $store['store_id'];
-        $httpClient = $this->httpClientsPool->get($storeId, $customerGroupId);
+        $host = $store['host'] ?? '';
+        $httpClient = $this->httpClientsPool->get($storeId, $customerGroupId, $host);
 
         while (true) {
             $this->resetChecker->check();
@@ -179,6 +186,8 @@ class Worker
             } catch (\Exception $e) {
                 $this->logger->log('Exception: ' . $e->getMessage());
 
+                sleep(2); // phpcs:ignore
+
                 if ($e->getCode() == 401) {
                     $this->logger->log('Shop returns unauthorized HTTP code, please configure basic auth');
                     die; // phpcs:ignore
@@ -187,7 +196,7 @@ class Worker
                 continue;
             }
 
-            $elapsed = number_format($this->stopwatch->stop('tile_warmup_request')->getDuration()/1000, 2);
+            $elapsed = number_format($this->stopwatch->stop('tile_warmup_request')->getDuration() / 1000, 2);
 
             $warmedUpTilesCount = $response->getHeader('X-Rendered-Tiles-Count')[0] ?? null;
             $alreadyWarmedTilesCount = $response->getHeader('X-Already-Warmed-Tiles-Count')[0] ?? null;

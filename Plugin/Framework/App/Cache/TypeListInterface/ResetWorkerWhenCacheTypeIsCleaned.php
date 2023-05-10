@@ -4,12 +4,9 @@ namespace MageSuite\ProductTileWarmup\Plugin\Framework\App\Cache\TypeListInterfa
 
 class ResetWorkerWhenCacheTypeIsCleaned
 {
-    /**
-     * @var \Magento\Framework\FlagManager
-     */
-    protected $flagManager;
+    protected \Magento\Framework\FlagManager $flagManager;
 
-    protected $cacheTypesThatTriggerWorkerReset = ['block_html'];
+    protected array $cacheTypesThatTriggerWorkerReset = ['block_html'];
 
     public function __construct(\Magento\Framework\FlagManager $flagManager)
     {

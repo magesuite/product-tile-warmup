@@ -4,25 +4,13 @@ namespace MageSuite\ProductTileWarmup\Service\Config;
 
 class WorkerConfigGenerator
 {
-    /**
-     * @var \MageSuite\ProductTileWarmup\Helper\Configuration
-     */
-    protected $configuration;
+    protected \MageSuite\ProductTileWarmup\Helper\Configuration $configuration;
 
-    /**
-     * @var \Magento\Store\Model\StoreManagerInterface
-     */
-    protected $storeManager;
+    protected \Magento\Store\Model\StoreManagerInterface $storeManager;
 
-    /**
-     * @var \Magento\Customer\Api\GroupManagementInterface
-     */
-    protected $groupManagement;
+    protected \Magento\Customer\Api\GroupManagementInterface $groupManagement;
 
-    /**
-     * @var \MageSuite\WarmupCustomerCredentialsGenerator\Service\Credentials\CredentialsProviderLazyCreateDecorator
-     */
-    protected $credentialsProvider;
+    protected \MageSuite\WarmupCustomerCredentialsGenerator\Service\Credentials\CredentialsProviderLazyCreateDecorator $credentialsProvider;
 
     public function __construct(
         \MageSuite\ProductTileWarmup\Helper\Configuration $configuration,
@@ -40,7 +28,7 @@ class WorkerConfigGenerator
     {
         $config = ['stores' => []];
 
-        $config['env_file_path'] = BP.'/app/etc/env.php';
+        $config['env_file_path'] = BP . '/app/etc/env.php';
         $config['debug_mode'] = $this->configuration->isDebugModeEnabled();
 
         if ($this->configuration->getBasicAuthUsername() && $this->configuration->getBasicAuthPassword()) {
@@ -64,11 +52,12 @@ class WorkerConfigGenerator
     protected function getStoreData(\Magento\Store\Api\Data\StoreInterface $store)
     {
         return [
+            'host' => $this->getHost($store),
             'store_id' => $store->getId(),
-            'tile_warmup_url' => $store->getUrl('tile/warmup'),
-            'is_logged_in_check_url' => $store->getUrl('customer/section/load'),
-            'login_form_url' => $store->getUrl('customer/account/login'),
-            'login_url' => $store->getUrl('tile/warmup/loginpost'),
+            'tile_warmup_url' => $this->getUrl('tile/warmup', $store),
+            'is_logged_in_check_url' => $this->getUrl('customer/section/load', $store),
+            'login_form_url' => $this->getUrl('customer/account/login', $store),
+            'login_url' => $this->getUrl('tile/warmup/loginpost', $store),
             'customer_groups' => $this->getCustomerGroups($store),
         ];
     }
@@ -107,5 +96,21 @@ class WorkerConfigGenerator
         }
 
         return $results;
+    }
+
+    protected function getHost(\Magento\Store\Api\Data\StoreInterface $store): ?string
+    {
+        if (!$this->configuration->isLocalhostModeEnabled()) {
+            return null;
+        }
+
+        $urlParts = parse_url($store->getBaseUrl()); //phpcs:ignore
+
+        return $urlParts['host'] ?? null;
+    }
+
+    protected function getUrl(string $path, \Magento\Store\Api\Data\StoreInterface $store): string
+    {
+        return $store->getUrl($path);
     }
 }

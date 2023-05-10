@@ -6,15 +6,9 @@ class ReturnAmountOfRenderedTiles
 {
     const TILE_WARMUP_FULL_ACTION_NAME = 'tile_warmup_index';
 
-    /**
-     * @var \Magento\Framework\App\Response\Http
-     */
-    protected $response;
+    protected \Magento\Framework\App\ResponseInterface $response;
 
-    /**
-     * @var \Magento\Framework\App\Request\Http
-     */
-    protected $request;
+    protected \Magento\Framework\App\RequestInterface $request;
 
     public function __construct(
         \Magento\Framework\App\ResponseInterface $response,

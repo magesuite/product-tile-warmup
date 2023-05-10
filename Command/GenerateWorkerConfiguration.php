@@ -4,16 +4,13 @@ namespace MageSuite\ProductTileWarmup\Command;
 
 class GenerateWorkerConfiguration extends \Symfony\Component\Console\Command\Command
 {
-    /**
-     * @var \MageSuite\ProductTileWarmup\Service\Config\WorkerConfigGeneratorFactory
-     */
-    protected $workerConfigGeneratorFacotry;
+    protected \MageSuite\ProductTileWarmup\Service\Config\WorkerConfigGeneratorFactory $workerConfigGeneratorFactory;
 
-    public function __construct(\MageSuite\ProductTileWarmup\Service\Config\WorkerConfigGeneratorFactory $workerConfigGeneratorFacotry)
+    public function __construct(\MageSuite\ProductTileWarmup\Service\Config\WorkerConfigGeneratorFactory $workerConfigGeneratorFactory)
     {
         parent::__construct();
 
-        $this->workerConfigGeneratorFacotry = $workerConfigGeneratorFacotry;
+        $this->workerConfigGeneratorFactory = $workerConfigGeneratorFactory;
     }
 
     /**
@@ -34,7 +31,7 @@ class GenerateWorkerConfiguration extends \Symfony\Component\Console\Command\Com
         \Symfony\Component\Console\Output\OutputInterface $output
     ) {
         /** @var \MageSuite\ProductTileWarmup\Service\Config\WorkerConfigGenerator $configGenerator */
-        $configGenerator = $this->workerConfigGeneratorFacotry->create();
+        $configGenerator = $this->workerConfigGeneratorFactory->create();
 
         $output->write(json_encode($configGenerator->getConfigContents()));
     }

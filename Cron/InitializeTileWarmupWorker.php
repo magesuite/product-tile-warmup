@@ -4,10 +4,7 @@ namespace MageSuite\ProductTileWarmup\Cron;
 
 class InitializeTileWarmupWorker
 {
-    /**
-     * @var \MageSuite\ProductTileWarmup\Service\CliWorkerInitializer
-     */
-    protected $cliWorkerInitializer;
+    protected ?\MageSuite\ProductTileWarmup\Service\CliWorkerInitializer $cliWorkerInitializer;
 
     public function __construct(\MageSuite\ProductTileWarmup\Service\CliWorkerInitializer $cliWorkerInitializer)
     {

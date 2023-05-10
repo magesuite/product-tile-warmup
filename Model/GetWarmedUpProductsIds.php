@@ -7,15 +7,9 @@ class GetWarmedUpProductsIds
     const REDIS_KEY_PREFIX = 'zc:k:???_';
     const MAX_AMOUNT_OF_KEYS_PER_SCAN = 500;
 
-    /**
-     * @var \MageSuite\ProductTile\Service\CacheKeyPrefixGenerator
-     */
-    protected $cacheKeyPrefixGenerator;
+    protected \MageSuite\ProductTile\Service\CacheKeyPrefixGenerator $cacheKeyPrefixGenerator;
 
-    /**
-     * @var \Magento\Framework\App\Cache
-     */
-    protected $cache;
+    protected \Magento\Framework\App\Cache $cache;
 
     public function __construct(
         \MageSuite\ProductTile\Service\CacheKeyPrefixGenerator $cacheKeyPrefixGenerator,
