@@ -111,6 +111,12 @@ class WorkerConfigGenerator
 
     protected function getUrl(string $path, \Magento\Store\Api\Data\StoreInterface $store): string
     {
-        return $store->getUrl($path);
+        $url = $store->getUrl($path);
+
+        if (!$this->configuration->isLocalhostModeEnabled()) {
+            return $url;
+        }
+
+        return str_replace('https://', 'http://', $url);
     }
 }
