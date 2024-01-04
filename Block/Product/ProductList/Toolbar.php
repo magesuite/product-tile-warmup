@@ -4,7 +4,6 @@ namespace MageSuite\ProductTileWarmup\Block\Product\ProductList;
 
 class Toolbar extends \Magento\Catalog\Block\Product\ProductList\Toolbar
 {
-    const LIMIT = 100;
 
     /**
      * {@inheritDoc}
@@ -26,11 +25,15 @@ class Toolbar extends \Magento\Catalog\Block\Product\ProductList\Toolbar
     }
 
     /**
-     * {@inheritDoc}
+     * ObjectManager is used directly to not override constructor
      */
     public function getLimit()
     {
-        return self::LIMIT;
+        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+
+        return $objectManager
+            ->get(\MageSuite\ProductTileWarmup\Helper\Configuration::class)
+            ->getProductLimit();
     }
 
     /**
