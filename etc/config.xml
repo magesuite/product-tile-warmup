@@ -6,6 +6,7 @@
                 <crawling_enabled>1</crawling_enabled>
                 <localhost_mode_enabled>0</localhost_mode_enabled>
                 <debug_mode_enabled>0</debug_mode_enabled>
+                <product_limit>100</product_limit>
                 <cron_schedule>*/10 * * * *</cron_schedule>
                 <customer_groups>0,1</customer_groups>
             </general>

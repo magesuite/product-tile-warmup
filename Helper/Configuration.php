@@ -7,6 +7,7 @@ class Configuration
     const XML_PATH_GENERAL_CRAWLING_ENABLED = 'product_tile_warmup/general/crawling_enabled';
     const XML_PATH_GENERAL_LOCALHOST_MODE_ENABLED = 'product_tile_warmup/general/localhost_mode_enabled';
     const XML_PATH_GENERAL_DEBUG_MODE_ENABLED = 'product_tile_warmup/general/debug_mode_enabled';
+    const XML_PATH_GENERAL_PRODUCT_LIMIT = 'product_tile_warmup/general/product_limit';
     const XML_PATH_GENERAL_CUSTOMER_GROUPS = 'product_tile_warmup/general/customer_groups';
     const XML_PATH_GENERAL_DISABLED_STORE_VIEWS = 'product_tile_warmup/general/disabled_store_views';
     const XML_PATH_GENERAL_WORKER_PROCESSES_CONFIGURATION = 'product_tile_warmup/general/worker_processes_configuration';
@@ -43,6 +44,11 @@ class Configuration
     public function isDebugModeEnabled(): bool
     {
         return (bool)$this->scopeConfig->getValue(self::XML_PATH_GENERAL_DEBUG_MODE_ENABLED);
+    }
+
+    public function getProductLimit(): int
+    {
+        return (int)$this->scopeConfig->getValue(self::XML_PATH_GENERAL_PRODUCT_LIMIT);
     }
 
     public function getDisabledStoreViewIds(): array

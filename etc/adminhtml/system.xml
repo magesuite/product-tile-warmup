@@ -29,6 +29,10 @@
                     <comment>Debug mode will log all actions performed by tile warmup workers into var/log/tile_warmup.log file.</comment>
                     <source_model>Magento\Config\Model\Config\Source\Enabledisable</source_model>
                 </field>
+                <field id="product_limit" translate="label" type="text" sortOrder="40" showInDefault="1">
+                    <label>Product Limit</label>
+                    <validate>validate-number validate-zero-or-greater</validate>
+                </field>
                 <field id="cron_schedule" translate="label" type="text" sortOrder="40" showInDefault="1">
                     <label>Cron schedule</label>
                     <comment>Provide cron schedule in * * * * * format</comment>
