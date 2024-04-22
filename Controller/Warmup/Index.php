@@ -2,11 +2,10 @@
 
 namespace MageSuite\ProductTileWarmup\Controller\Warmup;
 
-class Index implements \Magento\Framework\App\Action\HttpGetActionInterface
+class Index implements \Magento\Framework\App\Action\HttpGetActionInterface, \MageSuite\ProductTileWarmup\Controller\DisableProfilerInterface
 {
-    protected ?\Magento\Framework\View\Result\PageFactory $resultPageFactory;
-
-    protected ?\Magento\Backend\App\Action\Context $context;
+    protected \Magento\Framework\View\Result\PageFactory $resultPageFactory;
+    protected \Magento\Backend\App\Action\Context $context;
 
     public function __construct(
         \Magento\Backend\App\Action\Context $context,

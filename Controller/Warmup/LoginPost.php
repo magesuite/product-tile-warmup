@@ -4,7 +4,8 @@ namespace MageSuite\ProductTileWarmup\Controller\Warmup;
 
 class LoginPost implements
     \Magento\Framework\App\Action\HttpPostActionInterface,
-    \Magento\Framework\App\CsrfAwareActionInterface
+    \Magento\Framework\App\CsrfAwareActionInterface,
+    \MageSuite\ProductTileWarmup\Controller\DisableProfilerInterface
 {
     const EMAIL_VALIDATION_REGEXP = '/^s([0-9]+)-cg([0-9]+)\+warmup@cache-warmup\.(.+)$/';
 
