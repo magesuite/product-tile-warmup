@@ -14,6 +14,13 @@
                     <ticket_id>IPET-1942</ticket_id>
                 </entry>
             </tag>
+            <tag version="1.5.4" date="2024-10-02">
+                <entry>
+                    <type>FEATURE</type>
+                    <overview>Introduction of a time limit for iterations.</overview>
+                    <ticket_id>MGS-5335</ticket_id>
+                </entry>
+            </tag>
         </changelog>
     </module>
 </config>

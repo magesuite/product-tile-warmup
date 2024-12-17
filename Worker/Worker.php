@@ -59,6 +59,11 @@ class Worker
      */
     protected $lockManager;
 
+    /**
+     * @var IterationChecker
+     */
+    protected $iterationChecker;
+
     public function __construct($options)
     {
         $this->options = $options;
@@ -73,6 +78,7 @@ class Worker
         $this->httpClientsPool = new HttpClientPool($this->workerConfiguration['auth'] ?? null);
         $this->accountLogin = new AccountLogin($this->logger);
         $this->resetChecker = new ResetChecker($this->databaseConnection);
+        $this->iterationChecker = new IterationChecker($this->databaseConnection);
         $this->lockManager = new LockManager($this->databaseConnection);
         $this->stopwatch = new \Symfony\Component\Stopwatch\Stopwatch();
     }
@@ -87,6 +93,7 @@ class Worker
                 }
 
                 $this->resetChecker->check();
+                $this->iterationChecker->check();
                 $this->warmupStores();
 
                 sleep(1); // phpcs:ignore
@@ -95,6 +102,10 @@ class Worker
 
                 $this->requestDelayStatus->resetAllDelays();
                 $this->resetChecker->markResetAsDone();
+            } catch (TimeLimitException $e) {
+                $this->logger->log('Time limit exceeded, stopping worker');
+                $this->lockManager->releaseLock($this->options['group_id']);
+                return;
             } catch (\Exception $e) {
                 $this->logger->log('Exception: ' . $e->getMessage());
 
@@ -170,6 +181,7 @@ class Worker
 
         while (true) {
             $this->resetChecker->check();
+            $this->iterationChecker->check();
 
             $tileWarmupUrl = $store['tile_warmup_url'];
 
@@ -183,6 +195,10 @@ class Worker
                     'HEAD',
                     $tileWarmupUrl
                 );
+            } catch (TimeLimitException $e) {
+                $this->logger->log('Time limit exceeded, stopping worker');
+                $this->lockManager->releaseLock($this->options['group_id']);
+                return;
             } catch (\Exception $e) {
                 $this->logger->log('Exception: ' . $e->getMessage());
 
