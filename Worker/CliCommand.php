@@ -43,5 +43,7 @@ class CliCommand extends \Symfony\Component\Console\Command\Command
     ): int {
         $worker = new Worker($input->getOptions());
         $worker->execute();
+
+        return 1;
     }
 }

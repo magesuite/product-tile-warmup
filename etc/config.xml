@@ -9,6 +9,7 @@
                 <product_limit>100</product_limit>
                 <cron_schedule>*/10 * * * *</cron_schedule>
                 <customer_groups>0,1</customer_groups>
+                <time_iteration_limit>24</time_iteration_limit>
             </general>
             <basic_auth>
                 <username></username>

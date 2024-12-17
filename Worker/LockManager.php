@@ -36,4 +36,12 @@ class LockManager
         $this->lastCheckTimestamp = time();
         return (string)$result === "1";
     }
+
+    public function releaseLock($groupId)
+    {
+        $lockName = sprintf(self::LOCK_NAME, $this->databaseName, $groupId);
+
+        $statement = $this->databaseConnection->prepare("SELECT RELEASE_LOCK('$lockName')");
+        $statement->execute();
+    }
 }

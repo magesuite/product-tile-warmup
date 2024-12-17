@@ -1,19 +1,21 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MageSuite\ProductTileWarmup\Helper;
 
 class Configuration
 {
-    const XML_PATH_GENERAL_CRAWLING_ENABLED = 'product_tile_warmup/general/crawling_enabled';
-    const XML_PATH_GENERAL_LOCALHOST_MODE_ENABLED = 'product_tile_warmup/general/localhost_mode_enabled';
-    const XML_PATH_GENERAL_DEBUG_MODE_ENABLED = 'product_tile_warmup/general/debug_mode_enabled';
-    const XML_PATH_GENERAL_PRODUCT_LIMIT = 'product_tile_warmup/general/product_limit';
-    const XML_PATH_GENERAL_CUSTOMER_GROUPS = 'product_tile_warmup/general/customer_groups';
-    const XML_PATH_GENERAL_DISABLED_STORE_VIEWS = 'product_tile_warmup/general/disabled_store_views';
-    const XML_PATH_GENERAL_WORKER_PROCESSES_CONFIGURATION = 'product_tile_warmup/general/worker_processes_configuration';
-
-    const XML_PATH_BASIC_AUTH_USERNAME = 'product_tile_warmup/basic_auth/username';
-    const XML_PATH_BASIC_AUTH_PASSWORD = 'product_tile_warmup/basic_auth/password';
+    public const XML_PATH_GENERAL_CRAWLING_ENABLED = 'product_tile_warmup/general/crawling_enabled';
+    public const XML_PATH_GENERAL_LOCALHOST_MODE_ENABLED = 'product_tile_warmup/general/localhost_mode_enabled';
+    public const XML_PATH_GENERAL_DEBUG_MODE_ENABLED = 'product_tile_warmup/general/debug_mode_enabled';
+    public const XML_PATH_GENERAL_PRODUCT_LIMIT = 'product_tile_warmup/general/product_limit';
+    public const XML_PATH_GENERAL_CUSTOMER_GROUPS = 'product_tile_warmup/general/customer_groups';
+    public const XML_PATH_GENERAL_DISABLED_STORE_VIEWS = 'product_tile_warmup/general/disabled_store_views';
+    public const XML_PATH_GENERAL_WORKER_PROCESSES_CONFIGURATION = 'product_tile_warmup/general/worker_processes_configuration';
+    public const XML_PATH_GENERAL_TIME_ITERATION_LIMIT = 'product_tile_warmup/general/time_iteration_limit';
+    public const XML_PATH_BASIC_AUTH_USERNAME = 'product_tile_warmup/basic_auth/username';
+    public const XML_PATH_BASIC_AUTH_PASSWORD = 'product_tile_warmup/basic_auth/password';
 
     protected \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig;
 
@@ -98,5 +100,10 @@ class Configuration
         }
 
         return null;
+    }
+
+    public function getTimeIterationLimit(): int
+    {
+        return (int)$this->scopeConfig->getValue(self::XML_PATH_GENERAL_TIME_ITERATION_LIMIT);
     }
 }
