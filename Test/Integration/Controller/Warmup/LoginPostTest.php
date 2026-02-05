@@ -1,18 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MageSuite\ProductTileWarmup\Test\Integration\Controller\Warmup;
 
 class LoginPostTest extends \Magento\TestFramework\TestCase\AbstractController
 {
-    /**
-     * @var \Magento\Customer\Model\Session
-     */
-    protected $customerSession;
-
-    /**
-     * @var \Magento\Framework\App\ObjectManager
-     */
-    protected $objectManager;
+    protected \Magento\Customer\Model\Session $customerSession;
+    protected \Magento\Framework\App\ObjectManager $objectManager;
 
     /**
      * @inheritdoc
@@ -27,7 +22,7 @@ class LoginPostTest extends \Magento\TestFramework\TestCase\AbstractController
 
     /**
      * @magentoConfigFixture current_store customer/captcha/enable 0
-     * @magentoDataFixture loadWarmupCustomers
+     * @magentoDataFixture MageSuite_ProductTileWarmup::Test/Integration/_files/warmup_customer.php
      */
     public function testLoginWithEmailNotFromWarmup(): void
     {
@@ -43,7 +38,7 @@ class LoginPostTest extends \Magento\TestFramework\TestCase\AbstractController
 
     /**
      * @magentoConfigFixture current_store customer/captcha/enable 0
-     * @magentoDataFixture loadWarmupCustomers
+     * @magentoDataFixture MageSuite_ProductTileWarmup::Test/Integration/_files/warmup_customer.php
      */
     public function testLoginWithIncorrectPassword(): void
     {
@@ -59,7 +54,7 @@ class LoginPostTest extends \Magento\TestFramework\TestCase\AbstractController
 
     /**
      * @magentoConfigFixture current_store customer/captcha/enable 0
-     * @magentoDataFixture loadWarmupCustomers
+     * @magentoDataFixture MageSuite_ProductTileWarmup::Test/Integration/_files/warmup_customer.php
      */
     public function testLoginWithCorrectCredentials(): void
     {
@@ -71,11 +66,6 @@ class LoginPostTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->assertEquals('logged_in_successfully', $response['result']);
         $this->assertEquals(200, $this->getResponse()->getStatusCode());
         $this->assertTrue($this->customerSession->isLoggedIn());
-    }
-
-    public static function loadWarmupCustomers()
-    {
-        require __DIR__.'/../../_files/warmup_customer.php';
     }
 
     protected function prepareRequest(?string $email, ?string $password): void
