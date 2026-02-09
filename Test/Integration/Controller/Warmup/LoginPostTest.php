@@ -6,8 +6,8 @@ namespace MageSuite\ProductTileWarmup\Test\Integration\Controller\Warmup;
 
 class LoginPostTest extends \Magento\TestFramework\TestCase\AbstractController
 {
-    protected \Magento\Customer\Model\Session $customerSession;
-    protected \Magento\Framework\App\ObjectManager $objectManager;
+    protected ?\Magento\Customer\Model\Session $customerSession;
+    protected ?\Magento\Framework\App\ObjectManager $objectManager;
 
     /**
      * @inheritdoc
