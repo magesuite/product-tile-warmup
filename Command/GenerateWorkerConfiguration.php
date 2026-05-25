@@ -35,6 +35,6 @@ class GenerateWorkerConfiguration extends \Symfony\Component\Console\Command\Com
 
         $output->write(json_encode($configGenerator->getConfigContents()));
 
-        return \Symfony\Component\Console\Command\Command::SUCCESS;
+        return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
     }
 }
