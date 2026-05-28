@@ -64,18 +64,12 @@ class GetWarmedUpProductsIds
     }
 
     /**
-     * To use Redis SCAN command we need Credis_Client configured by Cache backend class
-     * That property is protected so we need to hack its retrieval using Reflection API
      * @throws \ReflectionException
      */
-    protected function getPrivateProperty($object, string $propertyName)
+    protected function getPrivateProperty(object $object, string $propertyName): mixed
     {
         $reflection = new \ReflectionClass($object);
-
-        $property = $reflection->getProperty($propertyName);
-        $property->setAccessible(true);
-
-        return $property->getValue($object);
+        return $reflection->getProperty($propertyName)->getValue($object);
     }
 
     /**
