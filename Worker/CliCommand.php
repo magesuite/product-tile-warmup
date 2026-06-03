@@ -44,6 +44,6 @@ class CliCommand extends \Symfony\Component\Console\Command\Command
         $worker = new Worker($input->getOptions());
         $worker->execute();
 
-        return 1;
+        return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
     }
 }

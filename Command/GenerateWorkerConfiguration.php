@@ -29,10 +29,12 @@ class GenerateWorkerConfiguration extends \Symfony\Component\Console\Command\Com
     protected function execute(
         \Symfony\Component\Console\Input\InputInterface $input,
         \Symfony\Component\Console\Output\OutputInterface $output
-    ) {
+    ): int {
         /** @var \MageSuite\ProductTileWarmup\Service\Config\WorkerConfigGenerator $configGenerator */
         $configGenerator = $this->workerConfigGeneratorFactory->create();
 
         $output->write(json_encode($configGenerator->getConfigContents()));
+
+        return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
     }
 }
